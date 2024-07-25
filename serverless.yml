@@ -1,0 +1,40 @@
+service: my-nest-service
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: us-east-1
+  environment:
+    TABLE_NAME: my-table
+
+functions:
+  api:
+    handler: lambda.handler
+    events:
+      - http:
+          path: items
+          method: post
+          cors: true
+      - http:
+          path: items/{id}
+          method: get
+          cors: true
+
+resources:
+  Resources:
+    MyDynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+
+plugins:
+  - serverless-offline
