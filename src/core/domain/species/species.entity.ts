@@ -37,7 +37,7 @@ export class SpeciesEntity extends BaseEntity {
     name: string
 
     @Translatable()
-    skin_colors: string
+    skin_colors: string[]
 
     constructor() {
         super();

@@ -14,6 +14,7 @@ module.exports = {
         minimizer: [
             new TerserPlugin({
                 terserOptions: {
+                    keep_classnames: true,
                     compress: {
                         drop_console: false, // Keep console.log statements
                     },

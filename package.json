@@ -7,6 +7,7 @@
   "node": "18.16.0",
   "license": "UNLICENSED",
   "scripts": {
+    "offline": "npm run build && serverless offline",
     "build": "npm run build:get-species-api-function && npm run build:create-species-api-function && npx tsc",
     "build:get-species-api-function": "npx webpack --config webpack.get-species-function.config.js",
     "build:create-species-api-function": "npx webpack --config webpack.create-species-function.config.js ",
@@ -35,6 +36,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@types/aws-lambda": "^8.10.142",
     "@types/uuid": "^10.0.0",
+    "@vendia/serverless-express": "^4.12.6",
     "aws-lambda": "^1.0.7",
     "aws-sdk": "^2.1663.0",
     "axios": "^1.7.2",

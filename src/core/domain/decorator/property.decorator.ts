@@ -5,7 +5,6 @@ export function Translatable() {
 }
 export function isTranslatable(target: any, propertyKey: string) {
     const resp = Reflect.getMetadata(formatMetadataKey, target, propertyKey);
-    console.log(resp)
     return !!resp
 }
 

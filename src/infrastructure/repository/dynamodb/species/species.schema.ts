@@ -29,5 +29,5 @@ export class SpeciesSchema {
     @attribute()
     name: string
     @attribute()
-    skin_colors: string
+    skin_colors: string[]
 }

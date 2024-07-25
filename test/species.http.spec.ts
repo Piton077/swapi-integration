@@ -2,9 +2,6 @@ import { Test } from '@nestjs/testing';
 import 'reflect-metadata';
 import { CreateSpeciesServices } from 'src/core/application/create-species/create-species.service';
 import { FinderSpeciesModule } from 'src/core/application/finder-species/finder-species.module';
-import { FinderSpeciesService } from 'src/core/application/finder-species/finder-species.services';
-import { ItalianDictionary } from 'src/core/domain/dictionaries/italian.dictionary';
-import { SpanishDictionary } from 'src/core/domain/dictionaries/spanish.dictionary';
 import { CreationRepository } from "src/core/domain/ports/repository/creation.repository";
 import { FinderRepository } from 'src/core/domain/ports/repository/finder.repository';
 import { SpeciesEntity } from 'src/core/domain/species/species.entity';
@@ -39,13 +36,13 @@ describe('Species Controller', () => {
       ]
 
     })
-    mockModuleBuilder.overrideProvider(FinderSpeciesService).useFactory({
-      factory(finderRepository) {
-        return new FinderSpeciesService([new SpanishDictionary(), new ItalianDictionary()], finderRepository)
-      },
-      inject: [FinderRepository]
-
-    })
+    //mockModuleBuilder.overrideProvider(FinderSpeciesService).useFactory({
+    //  factory(finderRepository) {
+    //    return new FinderSpeciesService([new SpanishDictionary(), new ItalianDictionary()], finderRepository)
+    //  },
+    //  inject: [FinderRepository]
+    //
+    //})
     mockModuleBuilder.overrideProvider(CreateSpeciesServices).useFactory({
       factory(finderRepository, creationRepository) {
         return new CreateSpeciesServices(finderRepository, creationRepository)

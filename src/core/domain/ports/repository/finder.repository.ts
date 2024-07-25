@@ -1,4 +1,4 @@
-export interface FinderRepository<T> {
+export interface FinderRepository<T = any> {
     findByName(name: string): Promise<T | null>
 }
 

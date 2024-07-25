@@ -4,19 +4,23 @@ import { SpeciesEntity } from "src/core/domain/species/species.entity";
 import { SpeciesSWAPIFinder } from "src/infrastructure/integrations/species/species-swapi.finder-repository";
 import { SpeciesSWAPIModule } from "src/infrastructure/integrations/species/species-swapi.finder.module";
 import { SpeciesDynamoDBModule } from "src/infrastructure/repository/dynamodb/species/species-dynamodb.module";
-import { FinderEntityChainResponsability } from "./finder-entity.chain";
+import { FinderEntityLink } from "./finder-entity.director";
 
 
 
 @Module({
     imports: [SpeciesDynamoDBModule.forFinding(), SpeciesSWAPIModule],
     providers: [{
-        provide: FinderEntityChainResponsability,
+        provide: FinderEntityLink,
         useFactory: (dynamoDBRepository: FinderRepository<SpeciesEntity>, swapiFinder: SpeciesSWAPIFinder) => {
-            return new FinderEntityChainResponsability<SpeciesEntity>([dynamoDBRepository, swapiFinder])
+            const mainRepository = new FinderEntityLink<SpeciesEntity>(dynamoDBRepository, false);
+            const swapiReository = new FinderEntityLink<SpeciesEntity>(swapiFinder, true)
+            mainRepository.setNext(swapiReository)
+            return mainRepository
         },
         inject: [FinderRepository, SpeciesSWAPIFinder]
-    },],
-    exports: [FinderEntityChainResponsability]
+    }
+    ],
+    exports: [FinderEntityLink]
 })
 export class SpeciesFinderEntiyChainModule { }

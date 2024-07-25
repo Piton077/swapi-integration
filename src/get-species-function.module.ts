@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
+import { FinderSpeciesModule } from './core/application/finder-species/finder-species.module';
 import { FindSpeciesController } from './infrastructure/http/species/find-species.controller';
 
 @Module({
-  imports: [GetSpeciesAppModule],
+  imports: [FinderSpeciesModule],
   controllers: [FindSpeciesController]
 
 })

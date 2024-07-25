@@ -1,7 +1,7 @@
 
 
-export interface CreatorBaseService<T, U> {
-    create(input: T): Promise<U>
+export interface CreatorBaseService<T> {
+    create(input: T): Promise<void>
 }
 
 export const FinderBaseService = Symbol('FinderBaseService');

@@ -1,4 +1,4 @@
-export interface SWAPISpeciesDTO {
+export class CreateSpeciesInputDto {
 
     average_height: number
 
@@ -12,9 +12,9 @@ export interface SWAPISpeciesDTO {
 
     edited: string
 
-    eye_colors: string
+    eye_colors: string[]
 
-    hair_colors: string
+    hair_colors: string[]
 
     homeworld: string
 
@@ -23,11 +23,4 @@ export interface SWAPISpeciesDTO {
     name: string
 
     skin_colors: string
-}
-
-export interface SWAPIOutputDto {
-    count: number,
-    next: string | null,
-    previous: string | null,
-    results: SWAPISpeciesDTO[]
 }

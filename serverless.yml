@@ -10,10 +10,15 @@ functions:
     handler: dist/get-species-lambda/entrypoint.handler
     environment:
       DYNAMODB_SPECIES: species
+      SWAPI_API_URL: https://swapi.py4e.com/api
     events:
       - http:
-          path: species
+          path: species/{name}
           method: get
+          cors: true
+          parameters:
+              paths:
+                name: true
 
   postSpecies:
     handler: dist/create-species-lambda/entrypoint.handler
