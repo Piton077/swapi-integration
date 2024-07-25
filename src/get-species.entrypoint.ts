@@ -1,13 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Callback, Context, Handler } from 'aws-lambda';
-import { AppModule } from './app.module';
+import { GetSpeciesAppModule } from './get-species-function.module';
+
 
 
 let cachedServer: any = null;
 
 async function bootstrapServer() {
   if (!cachedServer) {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(GetSpeciesAppModule);
     await app.init();
     cachedServer = app.getHttpAdapter().getInstance();
   }

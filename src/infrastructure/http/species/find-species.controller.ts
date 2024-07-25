@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { FinderSpeciesService } from 'src/core/application/finder-species/finder-species.services';
 
-@Controller('species/spanish')
-export class SpeciesController {
+@Controller()
+export class FindSpeciesController {
   constructor(private readonly finderService: FinderSpeciesService) { }
 
   @Get(':name')

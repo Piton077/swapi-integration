@@ -1,13 +1,13 @@
 import { Module } from "@nestjs/common";
 import { SpeciesDynamoDBModule } from "src/infrastructure/repository/dynamodb/species/species-dynamodb.module";
-import { CreatorSpeciesServices } from "./create-species.service";
+import { CreateSpeciesServices } from "./create-species.service";
 
 
 
 @Module({
     imports: [SpeciesDynamoDBModule.forStoring()],
-    providers: [CreatorSpeciesServices,
+    providers: [CreateSpeciesServices,
     ],
-    exports: [CreatorSpeciesServices]
+    exports: [CreateSpeciesServices]
 })
 export class CreateSpeciesModule { }

@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import 'reflect-metadata';
-import { CreatorSpeciesServices } from 'src/core/application/create-species/create-species.service';
+import { CreateSpeciesServices } from 'src/core/application/create-species/create-species.service';
 import { FinderSpeciesModule } from 'src/core/application/finder-species/finder-species.module';
 import { FinderSpeciesService } from 'src/core/application/finder-species/finder-species.services';
 import { ItalianDictionary } from 'src/core/domain/dictionaries/italian.dictionary';
@@ -8,10 +8,10 @@ import { SpanishDictionary } from 'src/core/domain/dictionaries/spanish.dictiona
 import { CreationRepository } from "src/core/domain/ports/repository/creation.repository";
 import { FinderRepository } from 'src/core/domain/ports/repository/finder.repository';
 import { SpeciesEntity } from 'src/core/domain/species/species.entity';
-import { SpeciesController } from '../species.controller';
+import { FindSpeciesController } from 'src/infrastructure/http/species/find-species.controller';
 
 describe('Species Controller', () => {
-  let controller: SpeciesController;
+  let controller: FindSpeciesController;
   let finderRepository: FinderRepository<SpeciesEntity>
   let creationRepository: CreationRepository<SpeciesEntity>
 
@@ -26,7 +26,7 @@ describe('Species Controller', () => {
   beforeEach(async () => {
     const mockModuleBuilder = Test.createTestingModule({
       imports: [FinderSpeciesModule],
-      controllers: [SpeciesController],
+      controllers: [FindSpeciesController],
       providers: [
         {
           provide: FinderRepository,
@@ -46,9 +46,9 @@ describe('Species Controller', () => {
       inject: [FinderRepository]
 
     })
-    mockModuleBuilder.overrideProvider(CreatorSpeciesServices).useFactory({
+    mockModuleBuilder.overrideProvider(CreateSpeciesServices).useFactory({
       factory(finderRepository, creationRepository) {
-        return new CreatorSpeciesServices(finderRepository, creationRepository)
+        return new CreateSpeciesServices(finderRepository, creationRepository)
 
       },
       inject: [FinderRepository, CreationRepository]
@@ -57,7 +57,7 @@ describe('Species Controller', () => {
 
     creationRepository = app.get<CreationRepository<SpeciesEntity>>(CreationRepository);
     finderRepository = app.get<FinderRepository<SpeciesEntity>>(FinderRepository)
-    controller = app.get<SpeciesController>(SpeciesController);
+    controller = app.get<FindSpeciesController>(FindSpeciesController);
   });
 
   describe('root', () => {

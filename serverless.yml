@@ -1,31 +1,52 @@
-service: my-nest-service
+service: challenge-sofftek
 
 provider:
   name: aws
-  runtime: nodejs16.x
+  runtime: nodejs18.x
   region: us-east-1
-  environment:
-    TABLE_NAME: my-table
 
 functions:
-  api:
-    handler: lambda.handler
+  getSpecies:
+    handler: dist/get-species-lambda/entrypoint.handler
+    environment:
+      DYNAMODB_SPECIES: species
     events:
       - http:
-          path: items
-          method: post
-          cors: true
-      - http:
-          path: items/{id}
+          path: species
           method: get
-          cors: true
+
+  postSpecies:
+    handler: dist/create-species-lambda/entrypoint.handler
+    environment:
+      DYNAMODB_SPECIES: species
+    events:
+      - http:
+          path: species
+          method: post
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+  - serverless-dotenv-plugin
+custom:
+  dynamodb:
+    stages:
+      - local
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+
+  serverless-offline:
+    httpPort: 3000
+    lambdaPort: 3002
 
 resources:
   Resources:
-    MyDynamoDBTable:
+    CharactersDynamoTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.TABLE_NAME}
+        TableName: characters
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -35,6 +56,16 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
-
-plugins:
-  - serverless-offline
+    SpeciesDynamoTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: species
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5

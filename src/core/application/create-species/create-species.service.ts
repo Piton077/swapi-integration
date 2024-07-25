@@ -6,7 +6,7 @@ import { SpeciesEntity } from "src/core/domain/species/species.entity";
 
 
 @Injectable()
-export class CreatorSpeciesServices implements CreatorBaseService<any, any> {
+export class CreateSpeciesServices implements CreatorBaseService<any, any> {
 
     constructor(@Inject(FinderRepository) private finderRepository: FinderRepository<SpeciesEntity>, @Inject(CreationRepository) private creationRepository: CreationRepository<SpeciesEntity>) {
 

@@ -1,7 +1,7 @@
 import { attribute, hashKey, table } from "@aws/dynamodb-data-mapper-annotations"
 
 
-@table('Species')
+@table(process.env.DYNAMODB_SPECIES)
 export class SpeciesSchema {
 
     @hashKey()
