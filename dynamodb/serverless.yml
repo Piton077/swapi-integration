@@ -1,0 +1,27 @@
+service: db-softtek
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+
+resources:
+  Resources:
+    DynamoTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: softtek
+        AttributeDefinitions:
+          - AttributeName: name
+            AttributeType: S
+        KeySchema:
+          - AttributeName: name
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+  Outputs:
+    table:
+      Value:
+        Ref: DynamoTable
+      Export:
+        Name: softtek

@@ -1,6 +1,6 @@
 import { DynamicModule, Module } from "@nestjs/common";
-import { CreationRepository } from "src/core/domain/ports/repository/creation.repository";
 import { FinderRepository } from "src/core/domain/ports/repository/finder.repository";
+import { WritingRepository } from "src/core/domain/ports/repository/writing.repository";
 import { DynamoDBModule } from "../dynamodb.module";
 import { SpeciesDynamoDBCreationRepository } from "./species-dynamodb.creation-repository";
 import { SpeciesDynamoDBFinderRepository } from "./species-dynamodb.finder-repository";
@@ -22,8 +22,8 @@ export class SpeciesDynamoDBModule {
         return {
             module: SpeciesDynamoDBModule,
             imports: [DynamoDBModule],
-            providers: [{ provide: CreationRepository, useClass: SpeciesDynamoDBCreationRepository }, { provide: FinderRepository, useClass: SpeciesDynamoDBFinderRepository }],
-            exports: [CreationRepository]
+            providers: [{ provide: WritingRepository, useClass: SpeciesDynamoDBCreationRepository }, { provide: FinderRepository, useClass: SpeciesDynamoDBFinderRepository }],
+            exports: [WritingRepository]
         }
     }
 

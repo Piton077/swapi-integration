@@ -48,7 +48,7 @@ module.exports = {
 
     },
     output: {
-        path: path.resolve(__dirname, 'dist', 'get-species-lambda',),
+        path: path.resolve(__dirname, 'get-species-package',),
         filename: 'entrypoint.js',
         libraryTarget: 'commonjs2',
     },

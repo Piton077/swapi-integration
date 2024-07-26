@@ -34,7 +34,6 @@ module.exports = {
                 test: /\.ts$/,
                 loader: 'ts-loader',
                 exclude: [/node_modules/],
-
             },
 
         ],
@@ -48,7 +47,7 @@ module.exports = {
 
     },
     output: {
-        path: path.resolve(__dirname, 'dist', 'create-species-lambda',),
+        path: path.resolve(__dirname, 'create-species-package'),
         filename: 'entrypoint.js',
         libraryTarget: 'commonjs2',
     },

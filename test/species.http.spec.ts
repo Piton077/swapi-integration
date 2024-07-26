@@ -2,20 +2,23 @@ import { Test } from '@nestjs/testing';
 import 'reflect-metadata';
 import { CreateSpeciesServices } from 'src/core/application/create-species/create-species.service';
 import { FinderSpeciesModule } from 'src/core/application/finder-species/finder-species.module';
-import { CreationRepository } from "src/core/domain/ports/repository/creation.repository";
+import { FinderSpeciesService } from 'src/core/application/finder-species/finder-species.services';
+import { ItalianDictionary } from 'src/core/domain/dictionaries/italian.dictionary';
+import { SpanishDictionary } from 'src/core/domain/dictionaries/spanish.dictionary';
 import { FinderRepository } from 'src/core/domain/ports/repository/finder.repository';
+import { WritingRepository } from 'src/core/domain/ports/repository/writing.repository';
 import { SpeciesEntity } from 'src/core/domain/species/species.entity';
-import { FindSpeciesController } from 'src/infrastructure/http/species/find-species.controller';
+import { FindSpeciesController } from 'src/infrastructure/http/species/find-species/find-species.controller';
 
 describe('Species Controller', () => {
   let controller: FindSpeciesController;
   let finderRepository: FinderRepository<SpeciesEntity>
-  let creationRepository: CreationRepository<SpeciesEntity>
+  let creationRepository: WritingRepository<SpeciesEntity>
 
   const mockFinderRepository = {
     findByName: jest.fn()
   }
-  const mockCreationRepository = {
+  const mockWritingRepository = {
     create: jest.fn()
   }
 
@@ -30,29 +33,29 @@ describe('Species Controller', () => {
           useValue: mockFinderRepository
         },
         {
-          provide: CreationRepository,
-          useValue: mockCreationRepository
+          provide: WritingRepository,
+          useValue: mockWritingRepository
         },
       ]
 
     })
-    //mockModuleBuilder.overrideProvider(FinderSpeciesService).useFactory({
-    //  factory(finderRepository) {
-    //    return new FinderSpeciesService([new SpanishDictionary(), new ItalianDictionary()], finderRepository)
-    //  },
-    //  inject: [FinderRepository]
-    //
-    //})
+    mockModuleBuilder.overrideProvider(FinderSpeciesService).useFactory({
+      factory(finderRepository) {
+        return new FinderSpeciesService([new SpanishDictionary(), new ItalianDictionary()], finderRepository)
+      },
+      inject: [FinderRepository]
+
+    })
     mockModuleBuilder.overrideProvider(CreateSpeciesServices).useFactory({
       factory(finderRepository, creationRepository) {
         return new CreateSpeciesServices(finderRepository, creationRepository)
 
       },
-      inject: [FinderRepository, CreationRepository]
+      inject: [FinderRepository, WritingRepository]
     })
     const app = await mockModuleBuilder.compile()
 
-    creationRepository = app.get<CreationRepository<SpeciesEntity>>(CreationRepository);
+    creationRepository = app.get<WritingRepository<SpeciesEntity>>(WritingRepository);
     finderRepository = app.get<FinderRepository<SpeciesEntity>>(FinderRepository)
     controller = app.get<FindSpeciesController>(FindSpeciesController);
   });
@@ -77,7 +80,6 @@ describe('Species Controller', () => {
       finderRepository.findByName = jest.fn().mockResolvedValueOnce(entity
       )
       const resp = await controller.findByName("name", "es")
-      console.log(resp)
       expect(resp).toEqual({});
     });
   });

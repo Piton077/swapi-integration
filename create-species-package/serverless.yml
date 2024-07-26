@@ -1,0 +1,36 @@
+service: create-species-package
+frameworkVersion: "4"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  apiGateway:
+    restApiId: ${param:restApiId}
+    restApiRootResourceId: ${param:restApiRootResourceId}
+  environment:
+    DYNAMODB_TABLE: softtek
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:DescribeTable
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:us-east-1:*:*"
+
+functions:
+  postSpecies:
+    name: create-species-package
+    handler: entrypoint.handler
+    timeout: 15
+    events:
+      - http:
+          path: ""
+          method: post
+          cors: true

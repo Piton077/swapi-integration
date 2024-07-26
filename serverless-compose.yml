@@ -1,0 +1,28 @@
+service: challenge-softftek
+frameworkVersion: "4"
+
+provider:
+  name: aws
+  region: us-east-1
+  environment:
+    DYNAMODB_TABLE: softtek
+
+services:
+  api-gw:
+    path: api-gateway/
+  db:
+    path: dynamodb/
+  get-species-lambda:
+    path: get-species-package/
+    params:
+      restApiId: ${api-gw.apiGatewayRestApiId}
+      restApiRootResourceId: ${api-gw.apiSpeciesParamResourceVar}
+    dependsOn:
+      - api-gw
+  create-species-lambda:
+    path: create-species-package/
+    params:
+      restApiId: ${api-gw.apiGatewayRestApiId}
+      restApiRootResourceId: ${api-gw.apiSpeciesResourceVar}
+    dependsOn:
+      - api-gw

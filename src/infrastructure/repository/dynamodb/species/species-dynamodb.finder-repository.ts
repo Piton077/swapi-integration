@@ -1,4 +1,4 @@
-import { ResourceNotFoundException } from '@aws-sdk/client-dynamodb';
+import { ItemNotFoundException } from '@aws/dynamodb-data-mapper';
 import { Injectable } from '@nestjs/common';
 import { FinderRepository } from 'src/core/domain/ports/repository/finder.repository';
 import { SpeciesEntity } from 'src/core/domain/species/species.entity';
@@ -17,7 +17,7 @@ export class SpeciesDynamoDBFinderRepository implements FinderRepository<Species
             const schema = await this.mapper.getMapper().get(Object.assign(new SpeciesSchema, { name }))
             return SpeciesDynamoDBMapper.fromSchema(schema);
         } catch (error) {
-            if (error.name === ResourceNotFoundException.name) {
+            if (error.name == ItemNotFoundException.name) {
                 return null
             }
             throw error

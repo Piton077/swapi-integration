@@ -13,13 +13,8 @@ export class SpeciesEntity extends BaseEntity {
     classification: string
 
     @Translatable()
-    created: string
-
-    @Translatable()
     designation: string
 
-    @Translatable()
-    edited: string
 
     @Translatable()
     eye_colors: string[]

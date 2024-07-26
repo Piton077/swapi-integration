@@ -1,0 +1,40 @@
+service: get-species-package
+frameworkVersion: "4"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  apiGateway:
+    restApiId: ${param:restApiId}
+    restApiRootResourceId: ${param:restApiRootResourceId}
+  environment:
+    DYNAMODB_TABLE: softtek
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:DescribeTable
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:us-east-1:*:*"
+
+functions:
+  getSpecies:
+    name: get-species-package
+    handler: entrypoint.handler
+    environment:
+      SWAPI_API_URL: https://swapi.py4e.com/api
+    events:
+      - http:
+          path: ""
+          method: get
+          cors: true
+          parameters:
+            paths:
+              name: true

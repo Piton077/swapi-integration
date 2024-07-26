@@ -1,0 +1,63 @@
+service: challenge-softftek
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+    DYNAMODB_TABLE: ${self:service}
+    DYNAMODB_LOCAL_URL: "http://localhost:8000"
+    ENV: dev
+
+functions:
+  getSpecies:
+    handler: get-species-package/entrypoint.handler
+    environment:
+      SWAPI_API_URL: https://swapi.py4e.com/api
+    events:
+      - http:
+          path: species/{name}
+          method: get
+          cors: true
+          parameters:
+            paths:
+              name: true
+
+  postSpecies:
+    handler: create-species-package/entrypoint.handler
+    timeout: 15
+    events:
+      - http:
+          path: species
+          method: post
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+  - serverless-dotenv-plugin
+custom:
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      convertEmptyValues: true
+
+  serverless-offline:
+    httpPort: 3000
+    lambdaPort: 3002
+
+resources:
+  Resources:
+    DynamoTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:service}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5

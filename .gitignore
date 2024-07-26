@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /**/node_modules
-
+.serverless/**
 # Logs
 logs
 *.log
@@ -11,6 +11,8 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+entrypoint.js
+package-lock.json
 
 # OS
 .DS_Store

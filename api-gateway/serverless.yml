@@ -1,0 +1,59 @@
+service: api-gw-softtek
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+resources:
+  Resources:
+    MyApiGW:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: api-gw-softtek
+    ApiResource:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        RestApiId: !Ref MyApiGW
+        ParentId: !GetAtt
+          - MyApiGW
+          - RootResourceId
+        PathPart: "api"
+    VersionResource:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        RestApiId: !Ref MyApiGW
+        ParentId: !Ref ApiResource
+        PathPart: "v1"
+    SpeciesResource:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        RestApiId: !Ref MyApiGW
+        ParentId: !Ref VersionResource
+        PathPart: "species"
+    SpeciesParamResource:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        RestApiId: !Ref MyApiGW
+        ParentId: !Ref SpeciesResource
+        PathPart: "{name}"
+  Outputs:
+    apiGatewayRestApiId:
+      Value:
+        Ref: MyApiGW
+      Export:
+        Name: MyApiGateway-restApiId
+    apiGatewayRestApiRootResourceId:
+      Value:
+        Fn::GetAtt:
+          - MyApiGW
+          - RootResourceId
+      Export:
+        Name: MyApiGateway-rootResourceId
+    apiSpeciesResourceVar:
+      Value: !Ref SpeciesResource
+      Export:
+        Name: !Sub ${AWS::StackName}-ApiSpeciesResourceVar
+    apiSpeciesParamResourceVar:
+      Value: !Ref SpeciesParamResource
+      Export:
+        # variable names are global so this will need more work to make it unique across stages.
+        Name: !Sub ${AWS::StackName}-ApiSpeciesParamResourceVar

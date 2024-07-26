@@ -1,1 +1,1 @@
-GET http://localhost:3000/dev/species/Human?language=es
+GET  https://6cjh0o5zc1.execute-api.us-east-1.amazonaws.com/dev/api/v1/species/Human?language=it

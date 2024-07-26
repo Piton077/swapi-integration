@@ -1,0 +1,3393 @@
+{
+  "/Users/piton007/side_projects/softtek-challenge/api-gateway": {
+    "versionSfCore": null,
+    "versionFramework": null,
+    "isWithinCompose": true,
+    "isCompose": false,
+    "composeOrgName": "piton007",
+    "composeResolverProviders": {},
+    "composeServiceName": "api-gw",
+    "servicePath": "/Users/piton007/side_projects/softtek-challenge/api-gateway",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "api-gw-softtek",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "ServerlessDeploymentBucket": {
+              "Type": "AWS::S3::Bucket",
+              "Properties": {
+                "BucketEncryption": {
+                  "ServerSideEncryptionConfiguration": [
+                    {
+                      "ServerSideEncryptionByDefault": {
+                        "SSEAlgorithm": "AES256"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "ServerlessDeploymentBucketPolicy": {
+              "Type": "AWS::S3::BucketPolicy",
+              "Properties": {
+                "Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "PolicyDocument": {
+                  "Statement": [
+                    {
+                      "Action": "s3:*",
+                      "Effect": "Deny",
+                      "Principal": "*",
+                      "Resource": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              },
+                              "/*"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              }
+                            ]
+                          ]
+                        }
+                      ],
+                      "Condition": {
+                        "Bool": {
+                          "aws:SecureTransport": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "MyApiGW": {
+              "Type": "AWS::ApiGateway::RestApi",
+              "Properties": {
+                "Name": "api-gw-softtek"
+              }
+            },
+            "ApiResource": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "RestApiId": {
+                  "Ref": "MyApiGW"
+                },
+                "ParentId": {
+                  "Fn::GetAtt": [
+                    "MyApiGW",
+                    "RootResourceId"
+                  ]
+                },
+                "PathPart": "api"
+              }
+            },
+            "VersionResource": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "RestApiId": {
+                  "Ref": "MyApiGW"
+                },
+                "ParentId": {
+                  "Ref": "ApiResource"
+                },
+                "PathPart": "v1"
+              }
+            },
+            "SpeciesResource": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "RestApiId": {
+                  "Ref": "MyApiGW"
+                },
+                "ParentId": {
+                  "Ref": "VersionResource"
+                },
+                "PathPart": "species"
+              }
+            },
+            "SpeciesParamResource": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "RestApiId": {
+                  "Ref": "MyApiGW"
+                },
+                "ParentId": {
+                  "Ref": "SpeciesResource"
+                },
+                "PathPart": "{name}"
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "Export": {
+                "Name": "sls-api-gw-softtek-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "apiGatewayRestApiId": {
+              "Value": {
+                "Ref": "MyApiGW"
+              },
+              "Export": {
+                "Name": "MyApiGateway-restApiId"
+              }
+            },
+            "apiGatewayRestApiRootResourceId": {
+              "Value": {
+                "Fn::GetAtt": [
+                  "MyApiGW",
+                  "RootResourceId"
+                ]
+              },
+              "Export": {
+                "Name": "MyApiGateway-rootResourceId"
+              }
+            },
+            "apiSpeciesResourceVar": {
+              "Value": {
+                "Ref": "SpeciesResource"
+              },
+              "Export": {
+                "Name": {
+                  "Fn::Sub": "${AWS::StackName}-ApiSpeciesResourceVar"
+                }
+              }
+            },
+            "apiSpeciesParamResourceVar": {
+              "Value": {
+                "Ref": "SpeciesParamResource"
+              },
+              "Export": {
+                "Name": {
+                  "Fn::Sub": "${AWS::StackName}-ApiSpeciesParamResourceVar"
+                }
+              }
+            }
+          }
+        },
+        "coreCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "ServerlessDeploymentBucket": {
+              "Type": "AWS::S3::Bucket",
+              "Properties": {
+                "BucketEncryption": {
+                  "ServerSideEncryptionConfiguration": [
+                    {
+                      "ServerSideEncryptionByDefault": {
+                        "SSEAlgorithm": "AES256"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "ServerlessDeploymentBucketPolicy": {
+              "Type": "AWS::S3::BucketPolicy",
+              "Properties": {
+                "Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "PolicyDocument": {
+                  "Statement": [
+                    {
+                      "Action": "s3:*",
+                      "Effect": "Deny",
+                      "Principal": "*",
+                      "Resource": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              },
+                              "/*"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              }
+                            ]
+                          ]
+                        }
+                      ],
+                      "Condition": {
+                        "Bool": {
+                          "aws:SecureTransport": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": {
+                "Ref": "ServerlessDeploymentBucket"
+              }
+            }
+          }
+        }
+      },
+      "resources": {
+        "Resources": {
+          "MyApiGW": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "api-gw-softtek"
+            }
+          },
+          "ApiResource": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "MyApiGW"
+              },
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "MyApiGW",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "api"
+            }
+          },
+          "VersionResource": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "MyApiGW"
+              },
+              "ParentId": {
+                "Ref": "ApiResource"
+              },
+              "PathPart": "v1"
+            }
+          },
+          "SpeciesResource": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "MyApiGW"
+              },
+              "ParentId": {
+                "Ref": "VersionResource"
+              },
+              "PathPart": "species"
+            }
+          },
+          "SpeciesParamResource": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "MyApiGW"
+              },
+              "ParentId": {
+                "Ref": "SpeciesResource"
+              },
+              "PathPart": "{name}"
+            }
+          }
+        },
+        "Outputs": {
+          "apiGatewayRestApiId": {
+            "Value": {
+              "Ref": "MyApiGW"
+            },
+            "Export": {
+              "Name": "MyApiGateway-restApiId"
+            }
+          },
+          "apiGatewayRestApiRootResourceId": {
+            "Value": {
+              "Fn::GetAtt": [
+                "MyApiGW",
+                "RootResourceId"
+              ]
+            },
+            "Export": {
+              "Name": "MyApiGateway-rootResourceId"
+            }
+          },
+          "apiSpeciesResourceVar": {
+            "Value": {
+              "Ref": "SpeciesResource"
+            },
+            "Export": {
+              "Name": {
+                "Fn::Sub": "${AWS::StackName}-ApiSpeciesResourceVar"
+              }
+            }
+          },
+          "apiSpeciesParamResourceVar": {
+            "Value": {
+              "Ref": "SpeciesParamResource"
+            },
+            "Export": {
+              "Name": {
+                "Fn::Sub": "${AWS::StackName}-ApiSpeciesParamResourceVar"
+              }
+            }
+          }
+        }
+      },
+      "org": "piton007"
+    },
+    "serviceRawFile": "service: api-gw-softtek\nprovider:\n  name: aws\n  runtime: nodejs18.x\n  region: us-east-1\nresources:\n  Resources:\n    MyApiGW:\n      Type: AWS::ApiGateway::RestApi\n      Properties:\n        Name: api-gw-softtek\n    ApiResource:\n      Type: AWS::ApiGateway::Resource\n      Properties:\n        RestApiId: !Ref MyApiGW\n        ParentId: !GetAtt\n          - MyApiGW\n          - RootResourceId\n        PathPart: \"api\"\n    VersionResource:\n      Type: AWS::ApiGateway::Resource\n      Properties:\n        RestApiId: !Ref MyApiGW\n        ParentId: !Ref ApiResource\n        PathPart: \"v1\"\n    SpeciesResource:\n      Type: AWS::ApiGateway::Resource\n      Properties:\n        RestApiId: !Ref MyApiGW\n        ParentId: !Ref VersionResource\n        PathPart: \"species\"\n    SpeciesParamResource:\n      Type: AWS::ApiGateway::Resource\n      Properties:\n        RestApiId: !Ref MyApiGW\n        ParentId: !Ref SpeciesResource\n        PathPart: \"{name}\"\n  Outputs:\n    apiGatewayRestApiId:\n      Value:\n        Ref: MyApiGW\n      Export:\n        Name: MyApiGateway-restApiId\n    apiGatewayRestApiRootResourceId:\n      Value:\n        Fn::GetAtt:\n          - MyApiGW\n          - RootResourceId\n      Export:\n        Name: MyApiGateway-rootResourceId\n    apiSpeciesResourceVar:\n      Value: !Ref SpeciesResource\n      Export:\n        Name: !Sub ${AWS::StackName}-ApiSpeciesResourceVar\n    apiSpeciesParamResourceVar:\n      Value: !Ref SpeciesParamResource\n      Export:\n        # variable names are global so this will need more work to make it unique across stages.\n        Name: !Sub ${AWS::StackName}-ApiSpeciesParamResourceVar\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {},
+    "error": null,
+    "params": {},
+    "machineId": "bfda237f7179b39d50a3c345567a7289",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "bff9a16d-c20f-42f9-973b-075c1e25c40d",
+    "orgName": "piton007",
+    "userId": "Bcvy30v3zpyXwStlbK",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "piton007",
+    "subscription": null,
+    "userEmail": "josemoraleswatanabe@gmail.com",
+    "serviceProviderAwsCredentials": "<REDACTED>",
+    "serviceProviderAwsAccountId": "905418060440",
+    "versionSf": "4.1.16",
+    "serviceProviderAwsCfStackName": "api-gw-softtek-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:905418060440:stack/api-gw-softtek-dev/f48a8e50-4b51-11ef-81c7-0affea51f1c9",
+    "serviceProviderAwsCfStackCreated": "2024-07-26T13:21:23.940Z",
+    "serviceProviderAwsCfStackUpdated": "2024-07-26T13:21:49.320Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "apiGatewayRestApiId",
+        "OutputValue": "6cjh0o5zc1",
+        "ExportName": "MyApiGateway-restApiId"
+      },
+      {
+        "OutputKey": "apiGatewayRestApiRootResourceId",
+        "OutputValue": "hims0lsi74",
+        "ExportName": "MyApiGateway-rootResourceId"
+      },
+      {
+        "OutputKey": "apiSpeciesParamResourceVar",
+        "OutputValue": "k4fusb",
+        "ExportName": "api-gw-softtek-dev-ApiSpeciesParamResourceVar"
+      },
+      {
+        "OutputKey": "apiSpeciesResourceVar",
+        "OutputValue": "j5q0sj",
+        "ExportName": "api-gw-softtek-dev-ApiSpeciesResourceVar"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "api-gw-softtek-dev-serverlessdeploymentbucket-zujfwo9cl0l2",
+        "ExportName": "sls-api-gw-softtek-dev-ServerlessDeploymentBucketName"
+      }
+    ]
+  },
+  "/Users/piton007/side_projects/softtek-challenge/dynamodb": {
+    "versionSfCore": null,
+    "versionFramework": null,
+    "isWithinCompose": true,
+    "isCompose": false,
+    "composeOrgName": "piton007",
+    "composeResolverProviders": {},
+    "composeServiceName": "db",
+    "servicePath": "/Users/piton007/side_projects/softtek-challenge/dynamodb",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "db-softtek",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "ServerlessDeploymentBucket": {
+              "Type": "AWS::S3::Bucket",
+              "Properties": {
+                "BucketEncryption": {
+                  "ServerSideEncryptionConfiguration": [
+                    {
+                      "ServerSideEncryptionByDefault": {
+                        "SSEAlgorithm": "AES256"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "ServerlessDeploymentBucketPolicy": {
+              "Type": "AWS::S3::BucketPolicy",
+              "Properties": {
+                "Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "PolicyDocument": {
+                  "Statement": [
+                    {
+                      "Action": "s3:*",
+                      "Effect": "Deny",
+                      "Principal": "*",
+                      "Resource": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              },
+                              "/*"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              }
+                            ]
+                          ]
+                        }
+                      ],
+                      "Condition": {
+                        "Bool": {
+                          "aws:SecureTransport": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "DynamoTable": {
+              "Type": "AWS::DynamoDB::Table",
+              "Properties": {
+                "TableName": "softtek",
+                "AttributeDefinitions": [
+                  {
+                    "AttributeName": "name",
+                    "AttributeType": "S"
+                  }
+                ],
+                "KeySchema": [
+                  {
+                    "AttributeName": "name",
+                    "KeyType": "HASH"
+                  }
+                ],
+                "ProvisionedThroughput": {
+                  "ReadCapacityUnits": 5,
+                  "WriteCapacityUnits": 5
+                }
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "Export": {
+                "Name": "sls-db-softtek-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "table": {
+              "Value": {
+                "Ref": "DynamoTable"
+              },
+              "Export": {
+                "Name": "softtek"
+              }
+            }
+          }
+        },
+        "coreCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "ServerlessDeploymentBucket": {
+              "Type": "AWS::S3::Bucket",
+              "Properties": {
+                "BucketEncryption": {
+                  "ServerSideEncryptionConfiguration": [
+                    {
+                      "ServerSideEncryptionByDefault": {
+                        "SSEAlgorithm": "AES256"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "ServerlessDeploymentBucketPolicy": {
+              "Type": "AWS::S3::BucketPolicy",
+              "Properties": {
+                "Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "PolicyDocument": {
+                  "Statement": [
+                    {
+                      "Action": "s3:*",
+                      "Effect": "Deny",
+                      "Principal": "*",
+                      "Resource": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              },
+                              "/*"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              }
+                            ]
+                          ]
+                        }
+                      ],
+                      "Condition": {
+                        "Bool": {
+                          "aws:SecureTransport": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": {
+                "Ref": "ServerlessDeploymentBucket"
+              }
+            }
+          }
+        }
+      },
+      "resources": {
+        "Resources": {
+          "DynamoTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "softtek",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "name",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "name",
+                  "KeyType": "HASH"
+                }
+              ],
+              "ProvisionedThroughput": {
+                "ReadCapacityUnits": 5,
+                "WriteCapacityUnits": 5
+              }
+            }
+          }
+        },
+        "Outputs": {
+          "table": {
+            "Value": {
+              "Ref": "DynamoTable"
+            },
+            "Export": {
+              "Name": "softtek"
+            }
+          }
+        }
+      },
+      "org": "piton007"
+    },
+    "serviceRawFile": "service: db-softtek\nprovider:\n  name: aws\n  runtime: nodejs18.x\n  region: us-east-1\n\nresources:\n  Resources:\n    DynamoTable:\n      Type: AWS::DynamoDB::Table\n      Properties:\n        TableName: softtek\n        AttributeDefinitions:\n          - AttributeName: name\n            AttributeType: S\n        KeySchema:\n          - AttributeName: name\n            KeyType: HASH\n        ProvisionedThroughput:\n          ReadCapacityUnits: 5\n          WriteCapacityUnits: 5\n  Outputs:\n    table:\n      Value:\n        Ref: DynamoTable\n      Export:\n        Name: softtek\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {},
+    "error": null,
+    "params": {},
+    "machineId": "bfda237f7179b39d50a3c345567a7289",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "bff9a16d-c20f-42f9-973b-075c1e25c40d",
+    "orgName": "piton007",
+    "userId": "Bcvy30v3zpyXwStlbK",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "piton007",
+    "subscription": null,
+    "userEmail": "josemoraleswatanabe@gmail.com",
+    "serviceProviderAwsCredentials": "<REDACTED>",
+    "serviceProviderAwsAccountId": "905418060440",
+    "versionSf": "4.1.16",
+    "serviceProviderAwsCfStackName": "db-softtek-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:905418060440:stack/db-softtek-dev/f4989810-4b51-11ef-af5e-127a48629629",
+    "serviceProviderAwsCfStackCreated": "2024-07-26T13:21:24.038Z",
+    "serviceProviderAwsCfStackUpdated": "2024-07-26T13:21:49.356Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "table",
+        "OutputValue": "softtek",
+        "ExportName": "softtek"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "db-softtek-dev-serverlessdeploymentbucket-gxgauhzdm84s",
+        "ExportName": "sls-db-softtek-dev-ServerlessDeploymentBucketName"
+      }
+    ]
+  },
+  "/Users/piton007/side_projects/softtek-challenge/create-species-package": {
+    "versionSfCore": null,
+    "versionFramework": null,
+    "isWithinCompose": true,
+    "isCompose": false,
+    "composeOrgName": "piton007",
+    "composeResolverProviders": {
+      "param": {
+        "instance": {
+          "credentials": "<REDACTED>",
+          "serviceConfigFile": {
+            "service": "create-species-package",
+            "frameworkVersion": "4",
+            "provider": {
+              "name": "aws",
+              "runtime": "nodejs18.x",
+              "region": "us-east-1",
+              "apiGateway": {
+                "restApiId": "6cjh0o5zc1",
+                "restApiRootResourceId": "j5q0sj"
+              },
+              "environment": {
+                "DYNAMODB_TABLE": "softtek"
+              },
+              "iam": {
+                "role": {
+                  "statements": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "dynamodb:DescribeTable",
+                        "dynamodb:Query",
+                        "dynamodb:Scan",
+                        "dynamodb:GetItem",
+                        "dynamodb:PutItem",
+                        "dynamodb:UpdateItem",
+                        "dynamodb:DeleteItem"
+                      ],
+                      "Resource": "arn:aws:dynamodb:us-east-1:*:*"
+                    }
+                  ]
+                }
+              },
+              "stage": "dev",
+              "versionFunctions": true,
+              "compiledCloudFormationTemplate": {
+                "AWSTemplateFormatVersion": "2010-09-09",
+                "Description": "The AWS CloudFormation template for this Serverless application",
+                "Resources": {
+                  "ServerlessDeploymentBucket": {
+                    "Type": "AWS::S3::Bucket",
+                    "Properties": {
+                      "BucketEncryption": {
+                        "ServerSideEncryptionConfiguration": [
+                          {
+                            "ServerSideEncryptionByDefault": {
+                              "SSEAlgorithm": "AES256"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "ServerlessDeploymentBucketPolicy": {
+                    "Type": "AWS::S3::BucketPolicy",
+                    "Properties": {
+                      "Bucket": {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "PolicyDocument": {
+                        "Statement": [
+                          {
+                            "Action": "s3:*",
+                            "Effect": "Deny",
+                            "Principal": "*",
+                            "Resource": [
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":s3:::",
+                                    {
+                                      "Ref": "ServerlessDeploymentBucket"
+                                    },
+                                    "/*"
+                                  ]
+                                ]
+                              },
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":s3:::",
+                                    {
+                                      "Ref": "ServerlessDeploymentBucket"
+                                    }
+                                  ]
+                                ]
+                              }
+                            ],
+                            "Condition": {
+                              "Bool": {
+                                "aws:SecureTransport": false
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "PostSpeciesLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/create-species-package"
+                    }
+                  },
+                  "IamRoleLambdaExecution": {
+                    "Type": "AWS::IAM::Role",
+                    "Properties": {
+                      "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                          {
+                            "Effect": "Allow",
+                            "Principal": {
+                              "Service": [
+                                "lambda.amazonaws.com"
+                              ]
+                            },
+                            "Action": [
+                              "sts:AssumeRole"
+                            ]
+                          }
+                        ]
+                      },
+                      "Policies": [
+                        {
+                          "PolicyName": {
+                            "Fn::Join": [
+                              "-",
+                              [
+                                "create-species-package",
+                                "dev",
+                                "lambda"
+                              ]
+                            ]
+                          },
+                          "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:CreateLogStream",
+                                  "logs:CreateLogGroup",
+                                  "logs:TagResource"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/create-species-package:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:PutLogEvents"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/create-species-package:*:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "dynamodb:DescribeTable",
+                                  "dynamodb:Query",
+                                  "dynamodb:Scan",
+                                  "dynamodb:GetItem",
+                                  "dynamodb:PutItem",
+                                  "dynamodb:UpdateItem",
+                                  "dynamodb:DeleteItem"
+                                ],
+                                "Resource": "arn:aws:dynamodb:us-east-1:*:*"
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "Path": "/",
+                      "RoleName": {
+                        "Fn::Join": [
+                          "-",
+                          [
+                            "create-species-package",
+                            "dev",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            "lambdaRole"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "PostSpeciesLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": {
+                          "Ref": "ServerlessDeploymentBucket"
+                        },
+                        "S3Key": "serverless/create-species-package/dev/1722000139999-2024-07-26T13:22:19.999Z/create-species-package.zip"
+                      },
+                      "Handler": "entrypoint.handler",
+                      "Runtime": "nodejs18.x",
+                      "FunctionName": "create-species-package",
+                      "MemorySize": 1024,
+                      "Timeout": 15,
+                      "Environment": {
+                        "Variables": {
+                          "DYNAMODB_TABLE": "softtek"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "PostSpeciesLogGroup"
+                    ]
+                  },
+                  "PostSpeciesLambdaVersionXgi8YjJIDocSYQ2Y8NqtdVNkBgdpgZamkERv4xAn4": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "PostSpeciesLambdaFunction"
+                      },
+                      "CodeSha256": "YwTnTjpPhoI17Ou/7EJIRJX9Urtu2ogq9itMHGeLgSI="
+                    }
+                  },
+                  "ApiGatewayMethodOptions": {
+                    "Type": "AWS::ApiGateway::Method",
+                    "Properties": {
+                      "AuthorizationType": "NONE",
+                      "HttpMethod": "OPTIONS",
+                      "MethodResponses": [
+                        {
+                          "StatusCode": "200",
+                          "ResponseParameters": {
+                            "method.response.header.Access-Control-Allow-Origin": true,
+                            "method.response.header.Access-Control-Allow-Headers": true,
+                            "method.response.header.Access-Control-Allow-Methods": true
+                          },
+                          "ResponseModels": {}
+                        }
+                      ],
+                      "RequestParameters": {},
+                      "Integration": {
+                        "Type": "MOCK",
+                        "RequestTemplates": {
+                          "application/json": "{statusCode:200}"
+                        },
+                        "ContentHandling": "CONVERT_TO_TEXT",
+                        "IntegrationResponses": [
+                          {
+                            "StatusCode": "200",
+                            "ResponseParameters": {
+                              "method.response.header.Access-Control-Allow-Origin": "'*'",
+                              "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                              "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                            },
+                            "ResponseTemplates": {
+                              "application/json": ""
+                            }
+                          }
+                        ]
+                      },
+                      "ResourceId": "j5q0sj",
+                      "RestApiId": "6cjh0o5zc1"
+                    }
+                  },
+                  "ApiGatewayMethodPost": {
+                    "Type": "AWS::ApiGateway::Method",
+                    "Properties": {
+                      "HttpMethod": "POST",
+                      "RequestParameters": {},
+                      "ResourceId": "j5q0sj",
+                      "RestApiId": "6cjh0o5zc1",
+                      "ApiKeyRequired": "<REDACTED>",
+                      "AuthorizationType": "NONE",
+                      "Integration": {
+                        "IntegrationHttpMethod": "POST",
+                        "Type": "AWS_PROXY",
+                        "Uri": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":apigateway:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":lambda:path/2015-03-31/functions/",
+                              {
+                                "Fn::GetAtt": [
+                                  "PostSpeciesLambdaFunction",
+                                  "Arn"
+                                ]
+                              },
+                              "/invocations"
+                            ]
+                          ]
+                        }
+                      },
+                      "MethodResponses": []
+                    },
+                    "DependsOn": [
+                      "PostSpeciesLambdaPermissionApiGateway"
+                    ]
+                  },
+                  "ApiGatewayDeployment1722000135758": {
+                    "Type": "AWS::ApiGateway::Deployment",
+                    "Properties": {
+                      "RestApiId": "6cjh0o5zc1",
+                      "StageName": "dev"
+                    },
+                    "DependsOn": [
+                      "ApiGatewayMethodOptions",
+                      "ApiGatewayMethodPost"
+                    ]
+                  },
+                  "PostSpeciesLambdaPermissionApiGateway": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "PostSpeciesLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "apigateway.amazonaws.com",
+                      "SourceArn": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":execute-api:",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            ":",
+                            {
+                              "Ref": "AWS::AccountId"
+                            },
+                            ":",
+                            "6cjh0o5zc1",
+                            "/*/*"
+                          ]
+                        ]
+                      }
+                    }
+                  }
+                },
+                "Outputs": {
+                  "ServerlessDeploymentBucketName": {
+                    "Value": {
+                      "Ref": "ServerlessDeploymentBucket"
+                    },
+                    "Export": {
+                      "Name": "sls-create-species-package-dev-ServerlessDeploymentBucketName"
+                    }
+                  },
+                  "PostSpeciesLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "PostSpeciesLambdaVersionXgi8YjJIDocSYQ2Y8NqtdVNkBgdpgZamkERv4xAn4"
+                    },
+                    "Export": {
+                      "Name": "sls-create-species-package-dev-PostSpeciesLambdaFunctionQualifiedArn"
+                    }
+                  },
+                  "ServiceEndpoint": {
+                    "Description": "URL of the service endpoint",
+                    "Value": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "https://",
+                          "6cjh0o5zc1",
+                          ".execute-api.",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ".",
+                          {
+                            "Ref": "AWS::URLSuffix"
+                          },
+                          "/dev"
+                        ]
+                      ]
+                    },
+                    "Export": {
+                      "Name": "sls-create-species-package-dev-ServiceEndpoint"
+                    }
+                  }
+                }
+              },
+              "coreCloudFormationTemplate": {
+                "AWSTemplateFormatVersion": "2010-09-09",
+                "Description": "The AWS CloudFormation template for this Serverless application",
+                "Resources": {
+                  "ServerlessDeploymentBucket": {
+                    "Type": "AWS::S3::Bucket",
+                    "Properties": {
+                      "BucketEncryption": {
+                        "ServerSideEncryptionConfiguration": [
+                          {
+                            "ServerSideEncryptionByDefault": {
+                              "SSEAlgorithm": "AES256"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "ServerlessDeploymentBucketPolicy": {
+                    "Type": "AWS::S3::BucketPolicy",
+                    "Properties": {
+                      "Bucket": {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "PolicyDocument": {
+                        "Statement": [
+                          {
+                            "Action": "s3:*",
+                            "Effect": "Deny",
+                            "Principal": "*",
+                            "Resource": [
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":s3:::",
+                                    {
+                                      "Ref": "ServerlessDeploymentBucket"
+                                    },
+                                    "/*"
+                                  ]
+                                ]
+                              },
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":s3:::",
+                                    {
+                                      "Ref": "ServerlessDeploymentBucket"
+                                    }
+                                  ]
+                                ]
+                              }
+                            ],
+                            "Condition": {
+                              "Bool": {
+                                "aws:SecureTransport": false
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "Outputs": {
+                  "ServerlessDeploymentBucketName": {
+                    "Value": {
+                      "Ref": "ServerlessDeploymentBucket"
+                    }
+                  }
+                }
+              },
+              "vpc": {}
+            },
+            "functions": {
+              "postSpecies": {
+                "name": "create-species-package",
+                "handler": "entrypoint.handler",
+                "timeout": 15,
+                "events": [
+                  {
+                    "http": {
+                      "path": "",
+                      "method": "post",
+                      "cors": {
+                        "origin": "*",
+                        "methods": [
+                          "OPTIONS",
+                          "POST"
+                        ],
+                        "headers": [
+                          "Content-Type",
+                          "X-Amz-Date",
+                          "Authorization",
+                          "X-Api-Key",
+                          "X-Amz-Security-Token",
+                          "X-Amz-User-Agent",
+                          "X-Amzn-Trace-Id"
+                        ],
+                        "allowCredentials": "<REDACTED>"
+                      },
+                      "integration": "AWS_PROXY"
+                    }
+                  }
+                ],
+                "package": {},
+                "memory": 1024,
+                "runtime": "nodejs18.x",
+                "vpc": {},
+                "versionLogicalId": "PostSpeciesLambdaVersionXgi8YjJIDocSYQ2Y8NqtdVNkBgdpgZamkERv4xAn4"
+              }
+            },
+            "org": "piton007"
+          },
+          "configFileDirPath": "/Users/piton007/side_projects/softtek-challenge/create-species-package",
+          "config": {
+            "type": "param"
+          },
+          "options": {
+            "param": [
+              "restApiId=6cjh0o5zc1",
+              "restApiRootResourceId=j5q0sj"
+            ]
+          },
+          "stage": "dev",
+          "dashboard": null,
+          "composeParams": {
+            "restApiId": "6cjh0o5zc1",
+            "restApiRootResourceId": "j5q0sj"
+          }
+        },
+        "resolvers": {}
+      }
+    },
+    "composeServiceName": "create-species-lambda",
+    "servicePath": "/Users/piton007/side_projects/softtek-challenge/create-species-package",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "create-species-package",
+      "frameworkVersion": "4",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "region": "us-east-1",
+        "apiGateway": {
+          "restApiId": "6cjh0o5zc1",
+          "restApiRootResourceId": "j5q0sj"
+        },
+        "environment": {
+          "DYNAMODB_TABLE": "softtek"
+        },
+        "iam": {
+          "role": {
+            "statements": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:DescribeTable",
+                  "dynamodb:Query",
+                  "dynamodb:Scan",
+                  "dynamodb:GetItem",
+                  "dynamodb:PutItem",
+                  "dynamodb:UpdateItem",
+                  "dynamodb:DeleteItem"
+                ],
+                "Resource": "arn:aws:dynamodb:us-east-1:*:*"
+              }
+            ]
+          }
+        },
+        "stage": "dev",
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "ServerlessDeploymentBucket": {
+              "Type": "AWS::S3::Bucket",
+              "Properties": {
+                "BucketEncryption": {
+                  "ServerSideEncryptionConfiguration": [
+                    {
+                      "ServerSideEncryptionByDefault": {
+                        "SSEAlgorithm": "AES256"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "ServerlessDeploymentBucketPolicy": {
+              "Type": "AWS::S3::BucketPolicy",
+              "Properties": {
+                "Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "PolicyDocument": {
+                  "Statement": [
+                    {
+                      "Action": "s3:*",
+                      "Effect": "Deny",
+                      "Principal": "*",
+                      "Resource": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              },
+                              "/*"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              }
+                            ]
+                          ]
+                        }
+                      ],
+                      "Condition": {
+                        "Bool": {
+                          "aws:SecureTransport": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "PostSpeciesLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/create-species-package"
+              }
+            },
+            "IamRoleLambdaExecution": {
+              "Type": "AWS::IAM::Role",
+              "Properties": {
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": [
+                          "lambda.amazonaws.com"
+                        ]
+                      },
+                      "Action": [
+                        "sts:AssumeRole"
+                      ]
+                    }
+                  ]
+                },
+                "Policies": [
+                  {
+                    "PolicyName": {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          "create-species-package",
+                          "dev",
+                          "lambda"
+                        ]
+                      ]
+                    },
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:CreateLogStream",
+                            "logs:CreateLogGroup",
+                            "logs:TagResource"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/create-species-package:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:PutLogEvents"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/create-species-package:*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "dynamodb:DescribeTable",
+                            "dynamodb:Query",
+                            "dynamodb:Scan",
+                            "dynamodb:GetItem",
+                            "dynamodb:PutItem",
+                            "dynamodb:UpdateItem",
+                            "dynamodb:DeleteItem"
+                          ],
+                          "Resource": "arn:aws:dynamodb:us-east-1:*:*"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "Path": "/",
+                "RoleName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "create-species-package",
+                      "dev",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "lambdaRole"
+                    ]
+                  ]
+                }
+              }
+            },
+            "PostSpeciesLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": {
+                    "Ref": "ServerlessDeploymentBucket"
+                  },
+                  "S3Key": "serverless/create-species-package/dev/1722000139999-2024-07-26T13:22:19.999Z/create-species-package.zip"
+                },
+                "Handler": "entrypoint.handler",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "create-species-package",
+                "MemorySize": 1024,
+                "Timeout": 15,
+                "Environment": {
+                  "Variables": {
+                    "DYNAMODB_TABLE": "softtek"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "PostSpeciesLogGroup"
+              ]
+            },
+            "PostSpeciesLambdaVersionXgi8YjJIDocSYQ2Y8NqtdVNkBgdpgZamkERv4xAn4": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "PostSpeciesLambdaFunction"
+                },
+                "CodeSha256": "YwTnTjpPhoI17Ou/7EJIRJX9Urtu2ogq9itMHGeLgSI="
+              }
+            },
+            "ApiGatewayMethodOptions": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "AuthorizationType": "NONE",
+                "HttpMethod": "OPTIONS",
+                "MethodResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": true,
+                      "method.response.header.Access-Control-Allow-Headers": true,
+                      "method.response.header.Access-Control-Allow-Methods": true
+                    },
+                    "ResponseModels": {}
+                  }
+                ],
+                "RequestParameters": {},
+                "Integration": {
+                  "Type": "MOCK",
+                  "RequestTemplates": {
+                    "application/json": "{statusCode:200}"
+                  },
+                  "ContentHandling": "CONVERT_TO_TEXT",
+                  "IntegrationResponses": [
+                    {
+                      "StatusCode": "200",
+                      "ResponseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                      },
+                      "ResponseTemplates": {
+                        "application/json": ""
+                      }
+                    }
+                  ]
+                },
+                "ResourceId": "j5q0sj",
+                "RestApiId": "6cjh0o5zc1"
+              }
+            },
+            "ApiGatewayMethodPost": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "POST",
+                "RequestParameters": {},
+                "ResourceId": "j5q0sj",
+                "RestApiId": "6cjh0o5zc1",
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "PostSpeciesLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "PostSpeciesLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayDeployment1722000135758": {
+              "Type": "AWS::ApiGateway::Deployment",
+              "Properties": {
+                "RestApiId": "6cjh0o5zc1",
+                "StageName": "dev"
+              },
+              "DependsOn": [
+                "ApiGatewayMethodOptions",
+                "ApiGatewayMethodPost"
+              ]
+            },
+            "PostSpeciesLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "PostSpeciesLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      "6cjh0o5zc1",
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "Export": {
+                "Name": "sls-create-species-package-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "PostSpeciesLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "PostSpeciesLambdaVersionXgi8YjJIDocSYQ2Y8NqtdVNkBgdpgZamkERv4xAn4"
+              },
+              "Export": {
+                "Name": "sls-create-species-package-dev-PostSpeciesLambdaFunctionQualifiedArn"
+              }
+            },
+            "ServiceEndpoint": {
+              "Description": "URL of the service endpoint",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "https://",
+                    "6cjh0o5zc1",
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    },
+                    "/dev"
+                  ]
+                ]
+              },
+              "Export": {
+                "Name": "sls-create-species-package-dev-ServiceEndpoint"
+              }
+            }
+          }
+        },
+        "coreCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "ServerlessDeploymentBucket": {
+              "Type": "AWS::S3::Bucket",
+              "Properties": {
+                "BucketEncryption": {
+                  "ServerSideEncryptionConfiguration": [
+                    {
+                      "ServerSideEncryptionByDefault": {
+                        "SSEAlgorithm": "AES256"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "ServerlessDeploymentBucketPolicy": {
+              "Type": "AWS::S3::BucketPolicy",
+              "Properties": {
+                "Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "PolicyDocument": {
+                  "Statement": [
+                    {
+                      "Action": "s3:*",
+                      "Effect": "Deny",
+                      "Principal": "*",
+                      "Resource": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              },
+                              "/*"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              }
+                            ]
+                          ]
+                        }
+                      ],
+                      "Condition": {
+                        "Bool": {
+                          "aws:SecureTransport": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": {
+                "Ref": "ServerlessDeploymentBucket"
+              }
+            }
+          }
+        },
+        "vpc": {}
+      },
+      "functions": {
+        "postSpecies": {
+          "name": "create-species-package",
+          "handler": "entrypoint.handler",
+          "timeout": 15,
+          "events": [
+            {
+              "http": {
+                "path": "",
+                "method": "post",
+                "cors": {
+                  "origin": "*",
+                  "methods": [
+                    "OPTIONS",
+                    "POST"
+                  ],
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                },
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "package": {},
+          "memory": 1024,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "PostSpeciesLambdaVersionXgi8YjJIDocSYQ2Y8NqtdVNkBgdpgZamkERv4xAn4"
+        }
+      },
+      "org": "piton007"
+    },
+    "serviceRawFile": "service: create-species-package\nframeworkVersion: \"4\"\n\nprovider:\n  name: aws\n  runtime: nodejs18.x\n  region: us-east-1\n  apiGateway:\n    restApiId: ${param:restApiId}\n    restApiRootResourceId: ${param:restApiRootResourceId}\n  environment:\n    DYNAMODB_TABLE: softtek\n  iam:\n    role:\n      statements:\n        - Effect: Allow\n          Action:\n            - dynamodb:DescribeTable\n            - dynamodb:Query\n            - dynamodb:Scan\n            - dynamodb:GetItem\n            - dynamodb:PutItem\n            - dynamodb:UpdateItem\n            - dynamodb:DeleteItem\n          Resource: \"arn:aws:dynamodb:us-east-1:*:*\"\n\nfunctions:\n  postSpecies:\n    name: create-species-package\n    handler: entrypoint.handler\n    timeout: 15\n    events:\n      - http:\n          path: \"\"\n          method: post\n          cors: true\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {
+      "param": [
+        "restApiId=6cjh0o5zc1",
+        "restApiRootResourceId=j5q0sj"
+      ]
+    },
+    "error": null,
+    "params": {},
+    "machineId": "98f2c2597232c391a53cdb0518f4e6a8",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "bff9a16d-c20f-42f9-973b-075c1e25c40d",
+    "orgName": "piton007",
+    "userId": "Bcvy30v3zpyXwStlbK",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "piton007",
+    "subscription": null,
+    "userEmail": "josemoraleswatanabe@gmail.com",
+    "serviceProviderAwsCredentials": "<REDACTED>",
+    "serviceProviderAwsAccountId": "905418060440",
+    "versionSf": "4.1.16",
+    "serviceProviderAwsCfStackName": "create-species-package-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:905418060440:stack/create-species-package-dev/16ca8fb0-4b52-11ef-b7d5-0affd7c5e7cb",
+    "serviceProviderAwsCfStackCreated": "2024-07-26T13:22:21.416Z",
+    "serviceProviderAwsCfStackUpdated": "2024-07-26T13:22:58.135Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "PostSpeciesLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:905418060440:function:create-species-package:21",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-create-species-package-dev-PostSpeciesLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ServiceEndpoint",
+        "OutputValue": "https://6cjh0o5zc1.execute-api.us-east-1.amazonaws.com/dev",
+        "Description": "URL of the service endpoint",
+        "ExportName": "sls-create-species-package-dev-ServiceEndpoint"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "create-species-package-de-serverlessdeploymentbuck-xupts5lwqbew",
+        "ExportName": "sls-create-species-package-dev-ServerlessDeploymentBucketName"
+      }
+    ]
+  },
+  "/Users/piton007/side_projects/softtek-challenge": {
+    "versionSfCore": null,
+    "versionFramework": "4.1.16",
+    "isWithinCompose": false,
+    "isCompose": false,
+    "composeOrgName": null,
+    "composeResolverProviders": {
+      "self": {
+        "instance": {
+          "credentials": "<REDACTED>",
+          "serviceConfigFile": {
+            "service": "challenge-softftek",
+            "provider": {
+              "name": "aws",
+              "runtime": "nodejs18.x",
+              "region": "us-east-1",
+              "environment": {
+                "DYNAMODB_TABLE": "challenge-softftek",
+                "DYNAMODB_LOCAL_URL": "http://localhost:8000",
+                "ENV": "dev"
+              },
+              "stage": "dev",
+              "versionFunctions": true
+            },
+            "functions": {
+              "getSpecies": {
+                "handler": "dist/get-species-lambda/entrypoint.handler",
+                "environment": {
+                  "SWAPI_API_URL": "https://swapi.py4e.com/api"
+                },
+                "events": [
+                  {
+                    "http": {
+                      "path": "species/{name}",
+                      "method": "get",
+                      "cors": true,
+                      "parameters": {
+                        "paths": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                ],
+                "name": "challenge-softftek-dev-getSpecies"
+              },
+              "postSpecies": {
+                "handler": "dist/create-species-lambda/entrypoint.handler",
+                "timeout": 15,
+                "events": [
+                  {
+                    "http": {
+                      "path": "species",
+                      "method": "post"
+                    }
+                  }
+                ],
+                "name": "challenge-softftek-dev-postSpecies"
+              }
+            },
+            "plugins": [
+              "serverless-dynamodb-local",
+              "serverless-offline",
+              "serverless-dotenv-plugin"
+            ],
+            "custom": {
+              "dynamodb": {
+                "start": {
+                  "port": 8000,
+                  "inMemory": true,
+                  "convertEmptyValues": true
+                }
+              },
+              "serverless-offline": {
+                "httpPort": 3000,
+                "lambdaPort": 3002
+              }
+            },
+            "resources": {
+              "Resources": {
+                "DynamoTable": {
+                  "Type": "AWS::DynamoDB::Table",
+                  "Properties": {
+                    "TableName": "challenge-softftek",
+                    "AttributeDefinitions": [
+                      {
+                        "AttributeName": "id",
+                        "AttributeType": "S"
+                      }
+                    ],
+                    "KeySchema": [
+                      {
+                        "AttributeName": "id",
+                        "KeyType": "HASH"
+                      }
+                    ],
+                    "ProvisionedThroughput": {
+                      "ReadCapacityUnits": 5,
+                      "WriteCapacityUnits": 5
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "configFileDirPath": "/Users/piton007/side_projects/softtek-challenge",
+          "config": {
+            "type": "self"
+          },
+          "options": {},
+          "stage": "dev",
+          "dashboard": null
+        },
+        "resolvers": {}
+      }
+    },
+    "composeServiceName": null,
+    "servicePath": "/Users/piton007/side_projects/softtek-challenge",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "challenge-softftek",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "region": "us-east-1",
+        "environment": {
+          "DYNAMODB_TABLE": "challenge-softftek",
+          "DYNAMODB_LOCAL_URL": "http://localhost:8000",
+          "ENV": "dev"
+        },
+        "stage": "dev",
+        "versionFunctions": true
+      },
+      "functions": {
+        "getSpecies": {
+          "handler": "dist/get-species-lambda/entrypoint.handler",
+          "environment": {
+            "SWAPI_API_URL": "https://swapi.py4e.com/api"
+          },
+          "events": [
+            {
+              "http": {
+                "path": "species/{name}",
+                "method": "get",
+                "cors": true,
+                "parameters": {
+                  "paths": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          ],
+          "name": "challenge-softftek-dev-getSpecies"
+        },
+        "postSpecies": {
+          "handler": "dist/create-species-lambda/entrypoint.handler",
+          "timeout": 15,
+          "events": [
+            {
+              "http": {
+                "path": "species",
+                "method": "post"
+              }
+            }
+          ],
+          "name": "challenge-softftek-dev-postSpecies"
+        }
+      },
+      "plugins": [
+        "serverless-dynamodb-local",
+        "serverless-offline",
+        "serverless-dotenv-plugin"
+      ],
+      "custom": {
+        "dynamodb": {
+          "start": {
+            "port": 8000,
+            "inMemory": true,
+            "convertEmptyValues": true
+          }
+        },
+        "serverless-offline": {
+          "httpPort": 3000,
+          "lambdaPort": 3002
+        }
+      },
+      "resources": {
+        "Resources": {
+          "DynamoTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "challenge-softftek",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "id",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "id",
+                  "KeyType": "HASH"
+                }
+              ],
+              "ProvisionedThroughput": {
+                "ReadCapacityUnits": 5,
+                "WriteCapacityUnits": 5
+              }
+            }
+          }
+        }
+      }
+    },
+    "serviceRawFile": "service: challenge-softftek\n\nprovider:\n  name: aws\n  runtime: nodejs18.x\n  region: us-east-1\n  environment:\n    DYNAMODB_TABLE: ${self:service}\n    DYNAMODB_LOCAL_URL: \"http://localhost:8000\"\n    ENV: dev\n\nfunctions:\n  getSpecies:\n    handler: dist/get-species-lambda/entrypoint.handler\n    environment:\n      SWAPI_API_URL: https://swapi.py4e.com/api\n    events:\n      - http:\n          path: species/{name}\n          method: get\n          cors: true\n          parameters:\n            paths:\n              name: true\n\n  postSpecies:\n    handler: dist/create-species-lambda/entrypoint.handler\n    timeout: 15\n    events:\n      - http:\n          path: species\n          method: post\n\nplugins:\n  - serverless-dynamodb-local\n  - serverless-offline\n  - serverless-dotenv-plugin\ncustom:\n  dynamodb:\n    start:\n      port: 8000\n      inMemory: true\n      convertEmptyValues: true\n\n  serverless-offline:\n    httpPort: 3000\n    lambdaPort: 3002\n\nresources:\n  Resources:\n    DynamoTable:\n      Type: AWS::DynamoDB::Table\n      Properties:\n        TableName: ${self:service}\n        AttributeDefinitions:\n          - AttributeName: id\n            AttributeType: S\n        KeySchema:\n          - AttributeName: id\n            KeyType: HASH\n        ProvisionedThroughput:\n          ReadCapacityUnits: 5\n          WriteCapacityUnits: 5\n",
+    "command": [
+      "remove"
+    ],
+    "options": {},
+    "error": null,
+    "params": {},
+    "machineId": "650ef2abd1f20aecd7ba9305e3da1cf5",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "bff9a16d-c20f-42f9-973b-075c1e25c40d",
+    "orgName": "piton007",
+    "userId": "Bcvy30v3zpyXwStlbK",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "piton007",
+    "subscription": null,
+    "userEmail": "josemoraleswatanabe@gmail.com",
+    "serviceProviderAwsCredentials": "<REDACTED>",
+    "serviceProviderAwsAccountId": "905418060440",
+    "versionSf": "4.1.16",
+    "serviceProviderAwsCfStackName": "challenge-softftek-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:905418060440:stack/challenge-softftek-dev/cc6b5e50-4afb-11ef-8692-0affd63487eb",
+    "serviceProviderAwsCfStackCreated": "2024-07-26T03:04:39.915Z",
+    "serviceProviderAwsCfStackUpdated": "2024-07-26T05:25:23.562Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_ROLLBACK_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "challenge-softftek-dev-serverlessdeploymentbucket-krzqebudruip"
+      }
+    ]
+  },
+  "unknown": {
+    "versionSfCore": null,
+    "versionFramework": "4.1.16",
+    "isWithinCompose": false,
+    "composeOrgName": null,
+    "composeServiceName": null,
+    "command": [],
+    "options": {
+      "version": true
+    },
+    "error": null,
+    "machineId": "650ef2abd1f20aecd7ba9305e3da1cf5",
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  },
+  "/Users/piton007/side_projects/softtek-challenge/get-species-package": {
+    "versionSfCore": null,
+    "versionFramework": null,
+    "isWithinCompose": true,
+    "isCompose": false,
+    "composeOrgName": "piton007",
+    "composeResolverProviders": {
+      "param": {
+        "instance": {
+          "credentials": "<REDACTED>",
+          "serviceConfigFile": {
+            "service": "get-species-package",
+            "frameworkVersion": "4",
+            "provider": {
+              "name": "aws",
+              "runtime": "nodejs18.x",
+              "region": "us-east-1",
+              "apiGateway": {
+                "restApiId": "6cjh0o5zc1",
+                "restApiRootResourceId": "k4fusb"
+              },
+              "environment": {
+                "DYNAMODB_TABLE": "softtek"
+              },
+              "iam": {
+                "role": {
+                  "statements": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "dynamodb:DescribeTable",
+                        "dynamodb:Query",
+                        "dynamodb:Scan",
+                        "dynamodb:GetItem",
+                        "dynamodb:PutItem",
+                        "dynamodb:UpdateItem",
+                        "dynamodb:DeleteItem"
+                      ],
+                      "Resource": "arn:aws:dynamodb:us-east-1:*:*"
+                    }
+                  ]
+                }
+              },
+              "stage": "dev",
+              "versionFunctions": true,
+              "compiledCloudFormationTemplate": {
+                "AWSTemplateFormatVersion": "2010-09-09",
+                "Description": "The AWS CloudFormation template for this Serverless application",
+                "Resources": {
+                  "ServerlessDeploymentBucket": {
+                    "Type": "AWS::S3::Bucket",
+                    "Properties": {
+                      "BucketEncryption": {
+                        "ServerSideEncryptionConfiguration": [
+                          {
+                            "ServerSideEncryptionByDefault": {
+                              "SSEAlgorithm": "AES256"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "ServerlessDeploymentBucketPolicy": {
+                    "Type": "AWS::S3::BucketPolicy",
+                    "Properties": {
+                      "Bucket": {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "PolicyDocument": {
+                        "Statement": [
+                          {
+                            "Action": "s3:*",
+                            "Effect": "Deny",
+                            "Principal": "*",
+                            "Resource": [
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":s3:::",
+                                    {
+                                      "Ref": "ServerlessDeploymentBucket"
+                                    },
+                                    "/*"
+                                  ]
+                                ]
+                              },
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":s3:::",
+                                    {
+                                      "Ref": "ServerlessDeploymentBucket"
+                                    }
+                                  ]
+                                ]
+                              }
+                            ],
+                            "Condition": {
+                              "Bool": {
+                                "aws:SecureTransport": false
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "GetSpeciesLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/get-species-package"
+                    }
+                  },
+                  "IamRoleLambdaExecution": {
+                    "Type": "AWS::IAM::Role",
+                    "Properties": {
+                      "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                          {
+                            "Effect": "Allow",
+                            "Principal": {
+                              "Service": [
+                                "lambda.amazonaws.com"
+                              ]
+                            },
+                            "Action": [
+                              "sts:AssumeRole"
+                            ]
+                          }
+                        ]
+                      },
+                      "Policies": [
+                        {
+                          "PolicyName": {
+                            "Fn::Join": [
+                              "-",
+                              [
+                                "get-species-package",
+                                "dev",
+                                "lambda"
+                              ]
+                            ]
+                          },
+                          "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:CreateLogStream",
+                                  "logs:CreateLogGroup",
+                                  "logs:TagResource"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/get-species-package:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:PutLogEvents"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/get-species-package:*:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "dynamodb:DescribeTable",
+                                  "dynamodb:Query",
+                                  "dynamodb:Scan",
+                                  "dynamodb:GetItem",
+                                  "dynamodb:PutItem",
+                                  "dynamodb:UpdateItem",
+                                  "dynamodb:DeleteItem"
+                                ],
+                                "Resource": "arn:aws:dynamodb:us-east-1:*:*"
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "Path": "/",
+                      "RoleName": {
+                        "Fn::Join": [
+                          "-",
+                          [
+                            "get-species-package",
+                            "dev",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            "lambdaRole"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "GetSpeciesLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": {
+                          "Ref": "ServerlessDeploymentBucket"
+                        },
+                        "S3Key": "serverless/get-species-package/dev/1722000140440-2024-07-26T13:22:20.440Z/get-species-package.zip"
+                      },
+                      "Handler": "entrypoint.handler",
+                      "Runtime": "nodejs18.x",
+                      "FunctionName": "get-species-package",
+                      "MemorySize": 1024,
+                      "Timeout": 6,
+                      "Environment": {
+                        "Variables": {
+                          "DYNAMODB_TABLE": "softtek",
+                          "SWAPI_API_URL": "https://swapi.py4e.com/api"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "GetSpeciesLogGroup"
+                    ]
+                  },
+                  "GetSpeciesLambdaVersion2PwcQjtODZKn4KTD3pVjsWlroSdEJEjT92Ph6D0aJk": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "GetSpeciesLambdaFunction"
+                      },
+                      "CodeSha256": "x/8CCq4F3bHkHOoe09UoWujobXMMeEB59MbrvSDIDHw="
+                    }
+                  },
+                  "ApiGatewayMethodOptions": {
+                    "Type": "AWS::ApiGateway::Method",
+                    "Properties": {
+                      "AuthorizationType": "NONE",
+                      "HttpMethod": "OPTIONS",
+                      "MethodResponses": [
+                        {
+                          "StatusCode": "200",
+                          "ResponseParameters": {
+                            "method.response.header.Access-Control-Allow-Origin": true,
+                            "method.response.header.Access-Control-Allow-Headers": true,
+                            "method.response.header.Access-Control-Allow-Methods": true
+                          },
+                          "ResponseModels": {}
+                        }
+                      ],
+                      "RequestParameters": {},
+                      "Integration": {
+                        "Type": "MOCK",
+                        "RequestTemplates": {
+                          "application/json": "{statusCode:200}"
+                        },
+                        "ContentHandling": "CONVERT_TO_TEXT",
+                        "IntegrationResponses": [
+                          {
+                            "StatusCode": "200",
+                            "ResponseParameters": {
+                              "method.response.header.Access-Control-Allow-Origin": "'*'",
+                              "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                              "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+                            },
+                            "ResponseTemplates": {
+                              "application/json": ""
+                            }
+                          }
+                        ]
+                      },
+                      "ResourceId": "k4fusb",
+                      "RestApiId": "6cjh0o5zc1"
+                    }
+                  },
+                  "ApiGatewayMethodGet": {
+                    "Type": "AWS::ApiGateway::Method",
+                    "Properties": {
+                      "HttpMethod": "GET",
+                      "RequestParameters": {},
+                      "ResourceId": "k4fusb",
+                      "RestApiId": "6cjh0o5zc1",
+                      "ApiKeyRequired": "<REDACTED>",
+                      "AuthorizationType": "NONE",
+                      "Integration": {
+                        "IntegrationHttpMethod": "POST",
+                        "Type": "AWS_PROXY",
+                        "Uri": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":apigateway:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":lambda:path/2015-03-31/functions/",
+                              {
+                                "Fn::GetAtt": [
+                                  "GetSpeciesLambdaFunction",
+                                  "Arn"
+                                ]
+                              },
+                              "/invocations"
+                            ]
+                          ]
+                        }
+                      },
+                      "MethodResponses": []
+                    },
+                    "DependsOn": [
+                      "GetSpeciesLambdaPermissionApiGateway"
+                    ]
+                  },
+                  "ApiGatewayDeployment1722000136099": {
+                    "Type": "AWS::ApiGateway::Deployment",
+                    "Properties": {
+                      "RestApiId": "6cjh0o5zc1",
+                      "StageName": "dev"
+                    },
+                    "DependsOn": [
+                      "ApiGatewayMethodOptions",
+                      "ApiGatewayMethodGet"
+                    ]
+                  },
+                  "GetSpeciesLambdaPermissionApiGateway": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "GetSpeciesLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "apigateway.amazonaws.com",
+                      "SourceArn": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":execute-api:",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            ":",
+                            {
+                              "Ref": "AWS::AccountId"
+                            },
+                            ":",
+                            "6cjh0o5zc1",
+                            "/*/*"
+                          ]
+                        ]
+                      }
+                    }
+                  }
+                },
+                "Outputs": {
+                  "ServerlessDeploymentBucketName": {
+                    "Value": {
+                      "Ref": "ServerlessDeploymentBucket"
+                    },
+                    "Export": {
+                      "Name": "sls-get-species-package-dev-ServerlessDeploymentBucketName"
+                    }
+                  },
+                  "GetSpeciesLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "GetSpeciesLambdaVersion2PwcQjtODZKn4KTD3pVjsWlroSdEJEjT92Ph6D0aJk"
+                    },
+                    "Export": {
+                      "Name": "sls-get-species-package-dev-GetSpeciesLambdaFunctionQualifiedArn"
+                    }
+                  },
+                  "ServiceEndpoint": {
+                    "Description": "URL of the service endpoint",
+                    "Value": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "https://",
+                          "6cjh0o5zc1",
+                          ".execute-api.",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ".",
+                          {
+                            "Ref": "AWS::URLSuffix"
+                          },
+                          "/dev"
+                        ]
+                      ]
+                    },
+                    "Export": {
+                      "Name": "sls-get-species-package-dev-ServiceEndpoint"
+                    }
+                  }
+                }
+              },
+              "coreCloudFormationTemplate": {
+                "AWSTemplateFormatVersion": "2010-09-09",
+                "Description": "The AWS CloudFormation template for this Serverless application",
+                "Resources": {
+                  "ServerlessDeploymentBucket": {
+                    "Type": "AWS::S3::Bucket",
+                    "Properties": {
+                      "BucketEncryption": {
+                        "ServerSideEncryptionConfiguration": [
+                          {
+                            "ServerSideEncryptionByDefault": {
+                              "SSEAlgorithm": "AES256"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "ServerlessDeploymentBucketPolicy": {
+                    "Type": "AWS::S3::BucketPolicy",
+                    "Properties": {
+                      "Bucket": {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "PolicyDocument": {
+                        "Statement": [
+                          {
+                            "Action": "s3:*",
+                            "Effect": "Deny",
+                            "Principal": "*",
+                            "Resource": [
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":s3:::",
+                                    {
+                                      "Ref": "ServerlessDeploymentBucket"
+                                    },
+                                    "/*"
+                                  ]
+                                ]
+                              },
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":s3:::",
+                                    {
+                                      "Ref": "ServerlessDeploymentBucket"
+                                    }
+                                  ]
+                                ]
+                              }
+                            ],
+                            "Condition": {
+                              "Bool": {
+                                "aws:SecureTransport": false
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "Outputs": {
+                  "ServerlessDeploymentBucketName": {
+                    "Value": {
+                      "Ref": "ServerlessDeploymentBucket"
+                    }
+                  }
+                }
+              },
+              "vpc": {}
+            },
+            "functions": {
+              "getSpecies": {
+                "name": "get-species-package",
+                "handler": "entrypoint.handler",
+                "environment": {
+                  "SWAPI_API_URL": "https://swapi.py4e.com/api"
+                },
+                "events": [
+                  {
+                    "http": {
+                      "path": "",
+                      "method": "get",
+                      "cors": {
+                        "origin": "*",
+                        "methods": [
+                          "OPTIONS",
+                          "GET"
+                        ],
+                        "headers": [
+                          "Content-Type",
+                          "X-Amz-Date",
+                          "Authorization",
+                          "X-Api-Key",
+                          "X-Amz-Security-Token",
+                          "X-Amz-User-Agent",
+                          "X-Amzn-Trace-Id"
+                        ],
+                        "allowCredentials": "<REDACTED>"
+                      },
+                      "parameters": {
+                        "paths": {
+                          "name": true
+                        }
+                      },
+                      "integration": "AWS_PROXY"
+                    }
+                  }
+                ],
+                "package": {},
+                "memory": 1024,
+                "timeout": 6,
+                "runtime": "nodejs18.x",
+                "vpc": {},
+                "versionLogicalId": "GetSpeciesLambdaVersion2PwcQjtODZKn4KTD3pVjsWlroSdEJEjT92Ph6D0aJk"
+              }
+            },
+            "org": "piton007"
+          },
+          "configFileDirPath": "/Users/piton007/side_projects/softtek-challenge/get-species-package",
+          "config": {
+            "type": "param"
+          },
+          "options": {
+            "param": [
+              "restApiId=6cjh0o5zc1",
+              "restApiRootResourceId=k4fusb"
+            ]
+          },
+          "stage": "dev",
+          "dashboard": null,
+          "composeParams": {
+            "restApiId": "6cjh0o5zc1",
+            "restApiRootResourceId": "j5q0sj"
+          }
+        },
+        "resolvers": {}
+      }
+    },
+    "composeServiceName": "get-species-lambda",
+    "servicePath": "/Users/piton007/side_projects/softtek-challenge/get-species-package",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "get-species-package",
+      "frameworkVersion": "4",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "region": "us-east-1",
+        "apiGateway": {
+          "restApiId": "6cjh0o5zc1",
+          "restApiRootResourceId": "k4fusb"
+        },
+        "environment": {
+          "DYNAMODB_TABLE": "softtek"
+        },
+        "iam": {
+          "role": {
+            "statements": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:DescribeTable",
+                  "dynamodb:Query",
+                  "dynamodb:Scan",
+                  "dynamodb:GetItem",
+                  "dynamodb:PutItem",
+                  "dynamodb:UpdateItem",
+                  "dynamodb:DeleteItem"
+                ],
+                "Resource": "arn:aws:dynamodb:us-east-1:*:*"
+              }
+            ]
+          }
+        },
+        "stage": "dev",
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "ServerlessDeploymentBucket": {
+              "Type": "AWS::S3::Bucket",
+              "Properties": {
+                "BucketEncryption": {
+                  "ServerSideEncryptionConfiguration": [
+                    {
+                      "ServerSideEncryptionByDefault": {
+                        "SSEAlgorithm": "AES256"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "ServerlessDeploymentBucketPolicy": {
+              "Type": "AWS::S3::BucketPolicy",
+              "Properties": {
+                "Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "PolicyDocument": {
+                  "Statement": [
+                    {
+                      "Action": "s3:*",
+                      "Effect": "Deny",
+                      "Principal": "*",
+                      "Resource": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              },
+                              "/*"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              }
+                            ]
+                          ]
+                        }
+                      ],
+                      "Condition": {
+                        "Bool": {
+                          "aws:SecureTransport": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "GetSpeciesLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/get-species-package"
+              }
+            },
+            "IamRoleLambdaExecution": {
+              "Type": "AWS::IAM::Role",
+              "Properties": {
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": [
+                          "lambda.amazonaws.com"
+                        ]
+                      },
+                      "Action": [
+                        "sts:AssumeRole"
+                      ]
+                    }
+                  ]
+                },
+                "Policies": [
+                  {
+                    "PolicyName": {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          "get-species-package",
+                          "dev",
+                          "lambda"
+                        ]
+                      ]
+                    },
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:CreateLogStream",
+                            "logs:CreateLogGroup",
+                            "logs:TagResource"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/get-species-package:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:PutLogEvents"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/get-species-package:*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "dynamodb:DescribeTable",
+                            "dynamodb:Query",
+                            "dynamodb:Scan",
+                            "dynamodb:GetItem",
+                            "dynamodb:PutItem",
+                            "dynamodb:UpdateItem",
+                            "dynamodb:DeleteItem"
+                          ],
+                          "Resource": "arn:aws:dynamodb:us-east-1:*:*"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "Path": "/",
+                "RoleName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "get-species-package",
+                      "dev",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "lambdaRole"
+                    ]
+                  ]
+                }
+              }
+            },
+            "GetSpeciesLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": {
+                    "Ref": "ServerlessDeploymentBucket"
+                  },
+                  "S3Key": "serverless/get-species-package/dev/1722000140440-2024-07-26T13:22:20.440Z/get-species-package.zip"
+                },
+                "Handler": "entrypoint.handler",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "get-species-package",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "DYNAMODB_TABLE": "softtek",
+                    "SWAPI_API_URL": "https://swapi.py4e.com/api"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "GetSpeciesLogGroup"
+              ]
+            },
+            "GetSpeciesLambdaVersion2PwcQjtODZKn4KTD3pVjsWlroSdEJEjT92Ph6D0aJk": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "GetSpeciesLambdaFunction"
+                },
+                "CodeSha256": "x/8CCq4F3bHkHOoe09UoWujobXMMeEB59MbrvSDIDHw="
+              }
+            },
+            "ApiGatewayMethodOptions": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "AuthorizationType": "NONE",
+                "HttpMethod": "OPTIONS",
+                "MethodResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": true,
+                      "method.response.header.Access-Control-Allow-Headers": true,
+                      "method.response.header.Access-Control-Allow-Methods": true
+                    },
+                    "ResponseModels": {}
+                  }
+                ],
+                "RequestParameters": {},
+                "Integration": {
+                  "Type": "MOCK",
+                  "RequestTemplates": {
+                    "application/json": "{statusCode:200}"
+                  },
+                  "ContentHandling": "CONVERT_TO_TEXT",
+                  "IntegrationResponses": [
+                    {
+                      "StatusCode": "200",
+                      "ResponseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+                      },
+                      "ResponseTemplates": {
+                        "application/json": ""
+                      }
+                    }
+                  ]
+                },
+                "ResourceId": "k4fusb",
+                "RestApiId": "6cjh0o5zc1"
+              }
+            },
+            "ApiGatewayMethodGet": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "GET",
+                "RequestParameters": {},
+                "ResourceId": "k4fusb",
+                "RestApiId": "6cjh0o5zc1",
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "GetSpeciesLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "GetSpeciesLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayDeployment1722000136099": {
+              "Type": "AWS::ApiGateway::Deployment",
+              "Properties": {
+                "RestApiId": "6cjh0o5zc1",
+                "StageName": "dev"
+              },
+              "DependsOn": [
+                "ApiGatewayMethodOptions",
+                "ApiGatewayMethodGet"
+              ]
+            },
+            "GetSpeciesLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "GetSpeciesLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      "6cjh0o5zc1",
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "Export": {
+                "Name": "sls-get-species-package-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "GetSpeciesLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "GetSpeciesLambdaVersion2PwcQjtODZKn4KTD3pVjsWlroSdEJEjT92Ph6D0aJk"
+              },
+              "Export": {
+                "Name": "sls-get-species-package-dev-GetSpeciesLambdaFunctionQualifiedArn"
+              }
+            },
+            "ServiceEndpoint": {
+              "Description": "URL of the service endpoint",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "https://",
+                    "6cjh0o5zc1",
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    },
+                    "/dev"
+                  ]
+                ]
+              },
+              "Export": {
+                "Name": "sls-get-species-package-dev-ServiceEndpoint"
+              }
+            }
+          }
+        },
+        "coreCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "ServerlessDeploymentBucket": {
+              "Type": "AWS::S3::Bucket",
+              "Properties": {
+                "BucketEncryption": {
+                  "ServerSideEncryptionConfiguration": [
+                    {
+                      "ServerSideEncryptionByDefault": {
+                        "SSEAlgorithm": "AES256"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "ServerlessDeploymentBucketPolicy": {
+              "Type": "AWS::S3::BucketPolicy",
+              "Properties": {
+                "Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "PolicyDocument": {
+                  "Statement": [
+                    {
+                      "Action": "s3:*",
+                      "Effect": "Deny",
+                      "Principal": "*",
+                      "Resource": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              },
+                              "/*"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              }
+                            ]
+                          ]
+                        }
+                      ],
+                      "Condition": {
+                        "Bool": {
+                          "aws:SecureTransport": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": {
+                "Ref": "ServerlessDeploymentBucket"
+              }
+            }
+          }
+        },
+        "vpc": {}
+      },
+      "functions": {
+        "getSpecies": {
+          "name": "get-species-package",
+          "handler": "entrypoint.handler",
+          "environment": {
+            "SWAPI_API_URL": "https://swapi.py4e.com/api"
+          },
+          "events": [
+            {
+              "http": {
+                "path": "",
+                "method": "get",
+                "cors": {
+                  "origin": "*",
+                  "methods": [
+                    "OPTIONS",
+                    "GET"
+                  ],
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                },
+                "parameters": {
+                  "paths": {
+                    "name": true
+                  }
+                },
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "GetSpeciesLambdaVersion2PwcQjtODZKn4KTD3pVjsWlroSdEJEjT92Ph6D0aJk"
+        }
+      },
+      "org": "piton007"
+    },
+    "serviceRawFile": "service: get-species-package\nframeworkVersion: \"4\"\n\nprovider:\n  name: aws\n  runtime: nodejs18.x\n  region: us-east-1\n  apiGateway:\n    restApiId: ${param:restApiId}\n    restApiRootResourceId: ${param:restApiRootResourceId}\n  environment:\n    DYNAMODB_TABLE: softtek\n  iam:\n    role:\n      statements:\n        - Effect: Allow\n          Action:\n            - dynamodb:DescribeTable\n            - dynamodb:Query\n            - dynamodb:Scan\n            - dynamodb:GetItem\n            - dynamodb:PutItem\n            - dynamodb:UpdateItem\n            - dynamodb:DeleteItem\n          Resource: \"arn:aws:dynamodb:us-east-1:*:*\"\n\nfunctions:\n  getSpecies:\n    name: get-species-package\n    handler: entrypoint.handler\n    environment:\n      SWAPI_API_URL: https://swapi.py4e.com/api\n    events:\n      - http:\n          path: \"\"\n          method: get\n          cors: true\n          parameters:\n            paths:\n              name: true\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {
+      "param": [
+        "restApiId=6cjh0o5zc1",
+        "restApiRootResourceId=k4fusb"
+      ]
+    },
+    "error": null,
+    "params": {},
+    "machineId": "98f2c2597232c391a53cdb0518f4e6a8",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "bff9a16d-c20f-42f9-973b-075c1e25c40d",
+    "orgName": "piton007",
+    "userId": "Bcvy30v3zpyXwStlbK",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "piton007",
+    "subscription": null,
+    "userEmail": "josemoraleswatanabe@gmail.com",
+    "serviceProviderAwsCredentials": "<REDACTED>",
+    "serviceProviderAwsAccountId": "905418060440",
+    "versionSf": "4.1.16",
+    "serviceProviderAwsCfStackName": "get-species-package-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:905418060440:stack/get-species-package-dev/16e0afc0-4b52-11ef-a5de-1216f2231def",
+    "serviceProviderAwsCfStackCreated": "2024-07-26T13:22:21.567Z",
+    "serviceProviderAwsCfStackUpdated": "2024-07-26T13:23:00.432Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "GetSpeciesLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:905418060440:function:get-species-package:13",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-get-species-package-dev-GetSpeciesLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ServiceEndpoint",
+        "OutputValue": "https://6cjh0o5zc1.execute-api.us-east-1.amazonaws.com/dev",
+        "Description": "URL of the service endpoint",
+        "ExportName": "sls-get-species-package-dev-ServiceEndpoint"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "get-species-package-dev-serverlessdeploymentbucket-0gqzwobv4kuz",
+        "ExportName": "sls-get-species-package-dev-ServerlessDeploymentBucketName"
+      }
+    ]
+  }
+}

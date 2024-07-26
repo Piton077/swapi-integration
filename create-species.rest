@@ -1,0 +1,23 @@
+POST https://al8h84yuzk.execute-api.us-east-1.amazonaws.com/dev/api/v1/species
+Content-Type: application/json
+
+{
+    "average_height": 2.1,
+    "average_lifespan": 400,
+    "classification": "Mammal",
+    "designation": "Sentient",
+    "eye_colors": ["blue", "green", "yellow", "brown", "golden", "red"],
+    "hair_colors": ["black", "brown"],
+    "homeworld": "https://swapi.py4e.com/api/planets/14/",
+    "language": "Shyriiwook",
+    "name": "Human2",
+    "people": [
+        "https://swapi.py4e.com/api/people/13/"
+    ],
+    "films": [
+        "https://swapi.py4e.com/api/films/1/",
+        "https://swapi.py4e.com/api/films/2/"
+    ],
+    "skin_colors":["gray"],
+    "url": "https://swapi.py4e.com/api/species/3/"
+}

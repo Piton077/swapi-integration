@@ -13,6 +13,10 @@ export const handler: Handler = async (
 ): Promise<APIGatewayProxyResult> => {
   if (!cachedServer) {
     const app = await NestFactory.create(GetSpeciesAppModule);
+    if (process.env.ENV !== 'dev') {
+      app.setGlobalPrefix('/api/v1');
+    }
+
     await app.init();
     cachedServer = serverlessExpress({ app: app.getHttpAdapter().getInstance() });
   }

@@ -1,0 +1,402 @@
+{
+  "service": {
+    "service": "api-gw-softtek",
+    "serviceObject": {
+      "name": "api-gw-softtek"
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs18.x",
+      "region": "us-east-1",
+      "stage": "dev",
+      "versionFunctions": true,
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketEncryption": {
+                "ServerSideEncryptionConfiguration": [
+                  {
+                    "ServerSideEncryptionByDefault": {
+                      "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "MyApiGW": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "api-gw-softtek"
+            }
+          },
+          "ApiResource": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "MyApiGW"
+              },
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "MyApiGW",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "api"
+            }
+          },
+          "VersionResource": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "MyApiGW"
+              },
+              "ParentId": {
+                "Ref": "ApiResource"
+              },
+              "PathPart": "v1"
+            }
+          },
+          "SpeciesResource": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "MyApiGW"
+              },
+              "ParentId": {
+                "Ref": "VersionResource"
+              },
+              "PathPart": "species"
+            }
+          },
+          "SpeciesParamResource": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "MyApiGW"
+              },
+              "ParentId": {
+                "Ref": "SpeciesResource"
+              },
+              "PathPart": "{name}"
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            },
+            "Export": {
+              "Name": "sls-api-gw-softtek-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "apiGatewayRestApiId": {
+            "Value": {
+              "Ref": "MyApiGW"
+            },
+            "Export": {
+              "Name": "MyApiGateway-restApiId"
+            }
+          },
+          "apiGatewayRestApiRootResourceId": {
+            "Value": {
+              "Fn::GetAtt": [
+                "MyApiGW",
+                "RootResourceId"
+              ]
+            },
+            "Export": {
+              "Name": "MyApiGateway-rootResourceId"
+            }
+          },
+          "apiSpeciesResourceVar": {
+            "Value": {
+              "Ref": "SpeciesResource"
+            },
+            "Export": {
+              "Name": {
+                "Fn::Sub": "${AWS::StackName}-ApiSpeciesResourceVar"
+              }
+            }
+          },
+          "apiSpeciesParamResourceVar": {
+            "Value": {
+              "Ref": "SpeciesParamResource"
+            },
+            "Export": {
+              "Name": {
+                "Fn::Sub": "${AWS::StackName}-ApiSpeciesParamResourceVar"
+              }
+            }
+          }
+        }
+      },
+      "coreCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketEncryption": {
+                "ServerSideEncryptionConfiguration": [
+                  {
+                    "ServerSideEncryptionByDefault": {
+                      "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            }
+          }
+        }
+      }
+    },
+    "pluginsData": {},
+    "functions": {},
+    "resources": {
+      "Resources": {
+        "MyApiGW": {
+          "Type": "AWS::ApiGateway::RestApi",
+          "Properties": {
+            "Name": "api-gw-softtek"
+          }
+        },
+        "ApiResource": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "RestApiId": {
+              "Ref": "MyApiGW"
+            },
+            "ParentId": {
+              "Fn::GetAtt": [
+                "MyApiGW",
+                "RootResourceId"
+              ]
+            },
+            "PathPart": "api"
+          }
+        },
+        "VersionResource": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "RestApiId": {
+              "Ref": "MyApiGW"
+            },
+            "ParentId": {
+              "Ref": "ApiResource"
+            },
+            "PathPart": "v1"
+          }
+        },
+        "SpeciesResource": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "RestApiId": {
+              "Ref": "MyApiGW"
+            },
+            "ParentId": {
+              "Ref": "VersionResource"
+            },
+            "PathPart": "species"
+          }
+        },
+        "SpeciesParamResource": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "RestApiId": {
+              "Ref": "MyApiGW"
+            },
+            "ParentId": {
+              "Ref": "SpeciesResource"
+            },
+            "PathPart": "{name}"
+          }
+        }
+      },
+      "Outputs": {
+        "apiGatewayRestApiId": {
+          "Value": {
+            "Ref": "MyApiGW"
+          },
+          "Export": {
+            "Name": "MyApiGateway-restApiId"
+          }
+        },
+        "apiGatewayRestApiRootResourceId": {
+          "Value": {
+            "Fn::GetAtt": [
+              "MyApiGW",
+              "RootResourceId"
+            ]
+          },
+          "Export": {
+            "Name": "MyApiGateway-rootResourceId"
+          }
+        },
+        "apiSpeciesResourceVar": {
+          "Value": {
+            "Ref": "SpeciesResource"
+          },
+          "Export": {
+            "Name": {
+              "Fn::Sub": "${AWS::StackName}-ApiSpeciesResourceVar"
+            }
+          }
+        },
+        "apiSpeciesParamResourceVar": {
+          "Value": {
+            "Ref": "SpeciesParamResource"
+          },
+          "Export": {
+            "Name": {
+              "Fn::Sub": "${AWS::StackName}-ApiSpeciesParamResourceVar"
+            }
+          }
+        }
+      }
+    },
+    "configValidationMode": "warn",
+    "serviceFilename": "serverless.yml",
+    "initialServerlessConfig": {
+      "service": "api-gw-softtek",
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "resources": {
+        "$ref": "$[\"service\"][\"resources\"]"
+      },
+      "org": "piton007"
+    },
+    "appId": null,
+    "org": "piton007",
+    "orgId": null,
+    "layers": {}
+  },
+  "package": {
+    "artifactDirectoryName": "serverless/api-gw-softtek/dev/1722000081962-2024-07-26T13:21:21.962Z",
+    "artifact": ""
+  }
+}

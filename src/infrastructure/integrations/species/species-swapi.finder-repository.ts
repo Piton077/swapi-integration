@@ -26,7 +26,6 @@ export class SpeciesSWAPIFinder implements FinderRepository<SpeciesEntity> {
             next = data2.next
         }
         if (retrievedEntity) {
-
             return this.mapToEntity(retrievedEntity);
         }
         return null
@@ -37,9 +36,7 @@ export class SpeciesSWAPIFinder implements FinderRepository<SpeciesEntity> {
         entity.average_height = swapiResp.average_height
         entity.average_lifespan = swapiResp.average_lifespan
         entity.classification = swapiResp.classification
-        entity.created = swapiResp.created
         entity.designation = swapiResp.designation
-        entity.edited = swapiResp.edited
         entity.eye_colors = swapiResp.eye_colors == 'none' ? [] : swapiResp.eye_colors.split(",")
         entity.hair_colors = swapiResp.hair_colors == 'none' ? [] : swapiResp.hair_colors.split(",")
         entity.homeworld = swapiResp.homeworld

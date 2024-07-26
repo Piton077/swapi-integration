@@ -6,7 +6,13 @@ import { DynamoDB } from "aws-sdk";
 export class DynamoDBMapper {
     private mapper: DataMapper
     constructor() {
-        const dynamoDbClient = new DynamoDB()
+        let dynamoDbClient = new DynamoDB()
+        if (process.env.ENV == 'dev') {
+            dynamoDbClient = new DynamoDB({
+                region: 'localhost',
+                endpoint: process.env.DYNAMODB_LOCAL_URL,
+            })
+        }
         this.mapper = new DataMapper({ client: dynamoDbClient });
     }
     getMapper() {

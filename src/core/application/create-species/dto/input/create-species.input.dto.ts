@@ -6,11 +6,7 @@ export class CreateSpeciesInputDto {
 
     classification: string
 
-    created: string
-
     designation: string
-
-    edited: string
 
     eye_colors: string[]
 
@@ -22,5 +18,5 @@ export class CreateSpeciesInputDto {
 
     name: string
 
-    skin_colors: string
+    skin_colors: string[]
 }
