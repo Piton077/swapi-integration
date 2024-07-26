@@ -24,15 +24,62 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Esto es un proyecto demo para un challenge de Softtek 
 
-## Installation
+### Consideraciones (Scope)
+- Si el usuario crea un registro que existe en SWAPI previamente, primara el registro en DynamoDB cuando se haga la búsqueda. 
+- No dejara crear un registro si ya existe en la db
+- Uso nodejs 18
+- Cuando se quiera redeployar debes bajar los recursos en aws con **serverless remove**
+- La documentacion Open AI Swagger esta como archivo json en la carpeta raiz **openapi.yml**
+
+## Arquitectura 
+![alt text](image.png)
+
+## Pasos a seguir para desplegar
+
+Debe tener previamente instalado aws cli configurado con una cuenta con permisos para acceder a 
+- DynamoDB
+- Lambdas
+- CloudWatchLogs
+- CreaciondeIAM
+- API Gateway
+
+
+Una vez verificado lo anterior.
+Correr las siguientes intrucciones para instalar las dependencias globales
 
 ```bash
-$ npm install
+npm install --global yarn
+npm i serverless -g
 ```
 
-## Running the app
+Correr las siguientes instrucciones para el deploy
+
+```bash
+yarn install
+npm run package:all
+serverless deploy
+```
+Por temas de serverless compose plugin, las urls que aparecen en la consola se deben agregar unos sufijos.
+
+- api_url = API_GATEWAY_URL # esto aparece en la consola
+
+### Crear especies
+POST api_url/api/v1/species
+### Buscar especie por nombre
+GET api_url/api/v1/species/{name}?language=es
+
+## Nota
+Para mas ayuda en temas de testing puedes correr los .rest. Debes tener instalado previamente Rest Plugin de VSCode
+
+
+## Correr en local
+1. tener docker y ejecutar **docker-compose up**
+2. correr el script **run-dynamodb-local.sh**
+3. correr **npm run offline:dev**
+
+
 
 ```bash
 # development
