@@ -1,1 +1,1 @@
-GET http://localhost:3000/dev/species/Human4?language=es
+GET http://localhost:3000/dev/species/Human2?language=it

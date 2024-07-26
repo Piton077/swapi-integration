@@ -2,10 +2,10 @@ import { Injectable } from "@nestjs/common";
 import { Dictionary } from "src/core/domain/dictionaries/dictionary";
 import { SpeciesNotFoundError } from "src/core/domain/errors/species/species-not-found.error";
 import { TranslateError } from "src/core/domain/errors/translate-error";
+import { FinderRepository } from "src/core/domain/ports/repository/finder.repository";
 import { FinderBaseService } from "src/core/domain/ports/services/finder-base.service";
 import { TranslatorService } from "src/core/domain/services/translator.service";
 import { SpeciesEntity } from "src/core/domain/species/species.entity";
-import { FinderEntityLink } from "../helpers/finder-entity-chain/finder-entity.director";
 
 
 @Injectable()
@@ -14,7 +14,7 @@ export class FinderSpeciesService implements FinderBaseService<Record<string, an
 
     constructor(
         private dictionaries: Dictionary[],
-        private finderRepository: FinderEntityLink<SpeciesEntity>,
+        private finderRepository: FinderRepository<SpeciesEntity>,
     ) {
 
     }

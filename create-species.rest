@@ -10,7 +10,7 @@ Content-Type: application/json
     "hair_colors": ["black", "brown"],
     "homeworld": "https://swapi.py4e.com/api/planets/14/",
     "language": "Shyriiwook",
-    "name": "Human2",
+    "name": "Human3",
     "people": [
         "https://swapi.py4e.com/api/people/13/"
     ],

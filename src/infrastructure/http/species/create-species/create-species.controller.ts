@@ -7,7 +7,7 @@ export class CreateSpeciesController {
     constructor(private readonly service: CreateSpeciesServices) { }
 
     @Post()
-    findByName(
+    create(
         @Body() body: CreateSpeciesInputDto
     ) {
         return this.service.create(body);

@@ -3,6 +3,7 @@ import { FinderRepository } from "src/core/domain/ports/repository/finder.reposi
 import { SpeciesEntity } from "src/core/domain/species/species.entity";
 import { SpeciesSWAPIFinder } from "src/infrastructure/integrations/species/species-swapi.finder-repository";
 import { SpeciesSWAPIModule } from "src/infrastructure/integrations/species/species-swapi.finder.module";
+import { SpeciesDynamoDBFinderRepository } from "src/infrastructure/repository/dynamodb/species/species-dynamodb.finder-repository";
 import { SpeciesDynamoDBModule } from "src/infrastructure/repository/dynamodb/species/species-dynamodb.module";
 import { FinderEntityLink } from "./finder-entity.director";
 
@@ -18,7 +19,7 @@ import { FinderEntityLink } from "./finder-entity.director";
             mainRepository.setNext(swapiReository)
             return mainRepository
         },
-        inject: [FinderRepository, SpeciesSWAPIFinder]
+        inject: [SpeciesDynamoDBFinderRepository, SpeciesSWAPIFinder]
     }
     ],
     exports: [FinderEntityLink]

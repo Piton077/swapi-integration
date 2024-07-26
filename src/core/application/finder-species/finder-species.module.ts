@@ -10,13 +10,15 @@ import { FinderSpeciesService } from "./finder-species.services";
 
 @Module({
     imports: [SpeciesFinderEntiyChainModule],
-    providers: [{
-        provide: FinderSpeciesService,
-        useFactory(finderRepository: FinderEntityLink<SpeciesEntity>) {
-            return new FinderSpeciesService([new SpanishDictionary(), new ItalianDictionary()], finderRepository)
-        },
-        inject: [FinderEntityLink]
-    }
+    providers: [
+        {
+            provide: FinderSpeciesService,
+            useFactory(finderRepository: FinderEntityLink<SpeciesEntity>) {
+                return new FinderSpeciesService([new SpanishDictionary(), new ItalianDictionary()], finderRepository)
+            },
+            inject: [FinderEntityLink]
+        }
+
     ],
     exports: [FinderSpeciesService]
 })
