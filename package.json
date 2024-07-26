@@ -10,7 +10,7 @@
     "package:all": "npm run package:get-species-api-function && npm run package:create-species-api-function",
     "package:get-species-api-function": "npm run build:get-species-api-function  &&  cd get-species-package && npm install",
     "package:create-species-api-function": "npm run build:create-species-api-function  &&  cd create-species-package && npm install",
-    "offline:dev": "npm run build && serverless offline -s dev",
+    "offline:dev": "npm run build && serverless offline --config serverless-offline -s dev",
     "build": "npm run build:get-species-api-function && npm run build:create-species-api-function && npx tsc",
     "build:get-species-api-function": "npx webpack --config webpack.get-species-function.config.js",
     "build:create-species-api-function": "npx webpack --config webpack.create-species-function.config.js ",

@@ -1,4 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { DuplicateSpeciesError } from "src/core/domain/errors/species/duplicate-species.error";
 import { FinderRepository } from "src/core/domain/ports/repository/finder.repository";
 import { WritingRepository } from "src/core/domain/ports/repository/writing.repository";
 import { CreatorBaseService } from "src/core/domain/ports/services/creator-base.service";
@@ -16,7 +17,7 @@ export class CreateSpeciesServices implements CreatorBaseService<CreateSpeciesIn
     async create(input: CreateSpeciesInputDto) {
         const entity = await this.finderRepository.findByName(input.name)
         if (entity) {
-            throw new Error(`Ya existe una especie con ese nombre ${input.name}`)
+            throw new DuplicateSpeciesError(input.name)
         }
         const entityToStore: SpeciesEntity = Object.assign(new SpeciesEntity, input)
         await this.writingRepository.create(entityToStore)

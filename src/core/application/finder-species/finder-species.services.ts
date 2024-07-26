@@ -1,5 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Dictionary } from "src/core/domain/dictionaries/dictionary";
+import { SpeciesNotFoundError } from "src/core/domain/errors/species/species-not-found.error";
+import { TranslateError } from "src/core/domain/errors/translate-error";
 import { FinderBaseService } from "src/core/domain/ports/services/finder-base.service";
 import { TranslatorService } from "src/core/domain/services/translator.service";
 import { SpeciesEntity } from "src/core/domain/species/species.entity";
@@ -18,12 +20,12 @@ export class FinderSpeciesService implements FinderBaseService<Record<string, an
     }
 
     async findByName(name: string, language: string) {
-        const entity = await this.finderRepository.findByName(name)
-        if (!entity) { throw new Error("Not species found") }
         const dictionary = this.dictionaries.find((d) => d.getLanguage() == language)
         if (!dictionary) {
-            throw new Error(`The language ${language} is not available at the moment`)
+            throw new TranslateError(language)
         }
+        const entity = await this.finderRepository.findByName(name)
+        if (!entity) { throw new SpeciesNotFoundError(name) }
         const translator = new TranslatorService(dictionary);
         const translation = translator.translate(entity)
         return translation

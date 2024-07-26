@@ -10,6 +10,6 @@ export class FindSpeciesController {
     @Param('name') name: string,
     @Query('language') language: string,
   ) {
-    return this.finderService.findByName(name, language);
+    return this.finderService.findByName(name, language ?? 'es');
   }
 }

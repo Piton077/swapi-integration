@@ -1,4 +1,4 @@
-POST https://al8h84yuzk.execute-api.us-east-1.amazonaws.com/dev/api/v1/species
+POST http://localhost:3000/dev/species
 Content-Type: application/json
 
 {

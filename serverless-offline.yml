@@ -1,4 +1,4 @@
-service: challenge-softftek
+service: challenge-softtek
 
 provider:
   name: aws

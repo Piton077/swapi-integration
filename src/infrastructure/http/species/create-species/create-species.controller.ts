@@ -10,7 +10,6 @@ export class CreateSpeciesController {
     findByName(
         @Body() body: CreateSpeciesInputDto
     ) {
-
         return this.service.create(body);
     }
 }
