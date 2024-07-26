@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import { CreateSpeciesServices } from 'src/core/application/create-species/create-species.service';
 import { FinderSpeciesModule } from 'src/core/application/finder-species/finder-species.module';
 import { FinderSpeciesService } from 'src/core/application/finder-species/finder-species.services';
+import { FinderEntityLink } from 'src/core/application/helpers/finder-entity-chain/finder-entity.director';
 import { ItalianDictionary } from 'src/core/domain/dictionaries/italian.dictionary';
 import { SpanishDictionary } from 'src/core/domain/dictionaries/spanish.dictionary';
 import { FinderRepository } from 'src/core/domain/ports/repository/finder.repository';
@@ -43,7 +44,7 @@ describe('Species Controller', () => {
       factory(finderRepository) {
         return new FinderSpeciesService([new SpanishDictionary(), new ItalianDictionary()], finderRepository)
       },
-      inject: [FinderRepository]
+      inject: [FinderEntityLink]
 
     })
     mockModuleBuilder.overrideProvider(CreateSpeciesServices).useFactory({
@@ -69,18 +70,30 @@ describe('Species Controller', () => {
         "created": "2014-12-10T16:44:31.486000Z",
         "designation": "Sentient",
         "edited": "2014-12-10T16:44:31.486000Z",
-        "eye_colors": "blue, green, yellow, brown, golden, red",
-        "hair_colors": "black, brown",
+        "eye_colors": ["blue", "green", "yellow", "brown", "golden", "red"],
+        "hair_colors": ["black", "brown"],
         "homeworld": "https://swapi.py4e.com/api/planets/14/",
         "language": "Shyriiwook",
         "name": "Wookie",
-        "skin_colors": "gray",
+        "skin_colors": ["gray"],
         "url": "https://swapi.py4e.com/api/species/3/"
       })
       finderRepository.findByName = jest.fn().mockResolvedValueOnce(entity
       )
       const resp = await controller.findByName("name", "es")
-      expect(resp).toEqual({});
+      expect(resp).toEqual({
+        altura_promedio: '2.1',
+        tiempo_vida_estimado: '400',
+        clasificacion: 'Mammal',
+        designacion: 'Sentient',
+        color_ojos: ["blue", "green", "yellow", "brown", "golden", "red"],
+        color_pelo: ["black", "brown"],
+        planeta_origen: 'https://swapi.py4e.com/api/planets/14/',
+        lenguaje: 'Shyriiwook',
+        nombre: 'Wookie',
+        color_piel: ["gray"]
+      }
+      );
     });
   });
 });

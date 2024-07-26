@@ -17,7 +17,10 @@ describe(' Translator Service', () => {
             entity.average_lifespan = 200
             const translator = new TranslatorService<SpeciesEntity>(spanishDictionary)
             const resp = translator.translate(entity)
-            expect(resp).toEqual({})
+            expect(resp).toEqual({
+                "altura_promedio": 200,
+                "tiempo_vida_estimado": 200,
+            })
 
         });
     });
