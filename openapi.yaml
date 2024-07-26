@@ -1,0 +1,141 @@
+openapi: 3.0.0
+info:
+  title: Swagger Softtek SWAPI - OpenAPI 3.0
+  description: |-
+    Esta es una pequeña demo para Softtek que integra SWAPI lambda y dynamoDB
+     - Si el usuario crea un recurso que exista en SWAPI , primará el registro en DynamoDB cuando se haga la búsqueda del recurso 
+    - No se permitira crear recurso si ya existe en el dynamodb
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://api_gateway/api/v1/dev
+tags:
+  - name: Especies
+    description: Endpoint para acceder a especies
+paths:
+  /species:
+    post:
+      tags:
+        - Especies
+      summary: Agregar nueva especie
+      description: Agregar nueva especie
+      operationId: addPet
+      requestBody:
+        description: Create nueva especie
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Species'
+        required: true
+      responses:
+        '201':
+          description: Especie creado existosamente
+        '409':
+          description: Ya existe una especie con ese nombre
+        '500':
+          description: Internal Server Error
+  /species/{name}:
+    get:
+      tags:
+        - Especies
+      summary: Find pet by ID
+      description: Returns a single pet
+      operationId: getPetById
+      parameters:
+        - name: name
+          in: path
+          description: nombre de la especie
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: language
+          schema:
+            type: string
+            default: es
+          description: lenguaje a traducir
+      responses:
+        '200':
+          description: Listado existoso
+        '404':
+          description: Especie no encontrada
+components:
+  schemas:
+    Species:
+      type: object
+      properties:
+        average_height:
+          type: number
+          format: float
+          example: 2.1
+        average_lifespan:
+          type: integer
+          example: 400
+        classification:
+          type: string
+          example: Mammal
+        designation:
+          type: string
+          example: Sentient
+        eye_colors:
+          type: array
+          items:
+            type: string
+          example:
+            - blue
+            - green
+            - yellow
+            - brown
+            - golden
+            - red
+        hair_colors:
+          type: array
+          items:
+            type: string
+          example:
+            - black
+            - brown
+        homeworld:
+          type: string
+          format: uri
+          example: https://swapi.py4e.com/api/planets/14/
+        language:
+          type: string
+          example: Shyriiwook
+        name:
+          type: string
+          example: Human3
+        people:
+          type: array
+          items:
+            type: string
+            format: uri
+          example:
+            - https://swapi.py4e.com/api/people/13/
+        films:
+          type: array
+          items:
+            type: string
+            format: uri
+          example:
+            - https://swapi.py4e.com/api/films/1/
+            - https://swapi.py4e.com/api/films/2/
+        skin_colors:
+          type: array
+          items:
+            type: string
+          example:
+            - gray
+        url:
+          type: string
+          format: uri
+          example: https://swapi.py4e.com/api/species/3/
+
